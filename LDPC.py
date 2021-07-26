@@ -19,9 +19,15 @@ class Data:
     self.r_0 = r_0
     self.r_1 = r_1
 #    || 0 || 1 || 2 || 3 || 4 || 5 || 6 || 7 ||
-#      0,1  1,3  
+#      0,1  1,3 
+   
   def __repr__(self):
     return f'neighborC: {self.neighborC} \n neighborR: {self.neighborR} \n ({self.q_0},{self.q_1}) \n ({self.r_0,self.r_1}) \n'
+
+class Data_compl:
+  def __init__(self, neighborC, neighborR):
+    self.neighborC = neighborC
+    self.neighborR = neighborR
 
 def matrix_generation(n: int,w_c :int, w_r: int, seed):
   """
@@ -61,6 +67,25 @@ def BSC_channel(code, crossoverProba: float):
       postProba.append((crossoverProba, 1- crossoverProba))
   return res, postProba
 
+def create_lookup(matrix):
+  m,n = np.shape(matrix)
+  lookup = {}
+#  string = np.zeros(shape= n , dtype=float)
+  for i in range(m):
+    for j in range(n):
+      if matrix[i][j] == 1:
+        neighborR = []
+        neighborC = []
+        for k in range(n):
+          if matrix[i][k] == 1 and j != k:    
+            neighborR.append((i,k))
+        for k in range(m):
+          if matrix[k][j] == 1 and i != k:
+            neighborC.append((k,j))
+        data = Data_compl(neighborC = neighborC, neighborR= neighborR)
+        lookup[(i,j)] = data
+  return lookup
+
 def create_input(matrix, proba):
   m,n = np.shape(matrix)
   lookup = {}
@@ -83,8 +108,25 @@ def create_input(matrix, proba):
 #    print(f'key:{key}, value: {lookup[key]} \n')
   return lookup
 
+def check_cycle(lookup: dict):
+  check_node = []
+  for x in lookup:
+    check_node.append(x)
+    for neighbor_row in lookup[x].neighborR:
+      if neighbor_row in check_node:
+        continue
+      for neighbor_col in lookup[neighbor_row].neighborC:
+        if neighbor_row in check_node:
+          continue
+        for neighbor_row2 in lookup[neighbor_col].neighborR:
+          if neighbor_row2 in check_node:
+            continue
+          for neighbor_col2 in lookup[neighbor_row2].neighborC:
+            if neighbor_col2 == x:
+              return False
+  return True
 
-def horizontal_run(lookup):
+def horizontal_run(lookup, syndrome):
   """
     lookup: table of position of 1 in the parity matrix
     => Update r_0, r_1 
@@ -93,8 +135,8 @@ def horizontal_run(lookup):
     res = 1
     for row_neighbor in lookup[x].neighborR:
        res *= lookup[row_neighbor].q_0 - lookup[row_neighbor].q_1
-    lookup[x].r_0 = round((1+res)/2,5)   #(-1)^(syndrom)
-    lookup[x].r_1 = round((1-res)/2,5)
+    lookup[x].r_0 = round((1+(-1)**syndrome[x[0]]*res)/2,5)   #(-1)^(syndrom)
+    lookup[x].r_1 = round((1-(-1)**syndrome[x[0]]*res)/2,5)
 #  print(lookup)
   return lookup
 
@@ -125,52 +167,65 @@ def vertical_run(lookup, post_proba, string):
     else:
       string[x[1]] = 0
     posterioproba[x[1]] = round(q_0/(q_0+q_1),2)
-  print(lookup)
+#  print(lookup)
 #  print(posterioproba)
-  print("=======================Posterior Probability===============================")
+#  print("=======================Posterior Probability===============================")
   dictionary_item = posterioproba.items()
   sorted_item = sorted(dictionary_item)
-  print(sorted_item)        # in the screen, we see a tuple of (dict, value), if the value is > 0.5, c_n = 1, otherwise c_n = 0
+#  print(sorted_item)        # in the screen, we see a tuple of (dict, value), if the value is > 0.5, c_n = 1, otherwise c_n = 0
   return (lookup, string)
 
-def verification(matrix, check):
+def verification(matrix, check, syndrome):
   """
     matrix: Parity check matrix
     check: the string after vertical run
-    => check if Hc = 0
+    => check if Hc = syndrome
   """ 
-  return not np.any(np.dot(matrix, check)%2)
+  return not np.any((np.dot(matrix, check)-syndrome)%2)
 
-
-def MessagePassing(matrix, proba, number_Iter = 20):
+def MessagePassing(matrix, proba, syndrome, number_Iter = 20):
   """
     Algorithm of message passing or belief propagation
   """
   lookup = create_input(matrix, proba)
   _,n = np.shape(matrix)
+  
+#  if check_cycle(lookup) == False:
+#    print("There is a cycle is size 4 in the matrix")
+#    return (False, None)
+  
   string = np.zeros(shape = n, dtype = float)
   for i in range(number_Iter):
-    print("round: {}".format(i))
-    print("=======================Horizontal Round===========================")
-    lookup = horizontal_run(lookup)
-    print("=======================Vertical Round===========================")
+#    print("round: {}".format(i))
+#    print("=======================Horizontal Round===========================")
+    lookup = horizontal_run(lookup, syndrome)
+#    print("=======================Vertical Round===========================")
     (lookup, string) = vertical_run(lookup, proba,string)
-    print(string)
-    if verification(matrix, string):
+    if verification(matrix, string, syndrome):
+  #    print("success")
       return (True, string)
     else:
       continue
+  #print("Failure")
   return (False, None)
 
 class TestSum(unittest.TestCase):
   matrix = np.array([[1,0,1,1,0,1,0,0],[1,1,0,1,0,0,0,1],[0,0,0,0,1,1,1,1],[0,1,1,0,1,0,1,0]])
   proba = [(0.1,0.9),(0.9,0.1),(0.1,0.9),(0.1,0.9),(0.9,0.1),(0.1,0.9),(0.9,0.1),(0.1,0.9)]
   
-  def test_verification_true(self):
-    self.assertEqual(verification(matrix = matrix,check = [1,1,1,1,0,1,0,1]), True , " Should be True")
+#  def test_verification_true(self):
+#    self.assertEqual(verification(matrix = matrix,check = [1,1,1,1,0,1,0,1]), True , " Should be True")
 
-  def test_verification_false(self):
-    self.assertEqual(verification(matrix = [[0,1,0,1,1,0],[0,0,1,1,0,0]], check = [0,1,0,0,0,0]), False, " Should be False")
+ # def test_verification_false(self):
+#    self.assertEqual(verification(matrix = [[0,1,0,1,1,0],[0,0,1,1,0,0]], check = [0,1,0,0,0,0]), False, " Should be False")
+
+  def test_check_cycle1(self):
+    lookup = create_lookup(np.array([[1,1,1,1,0,0,0,0],[0,0,0,0,1,1,1,1],[1,0,0,0,0,0,1,0],[0,0,0,1,0,0,0,1]]))
+    self.assertEqual(check_cycle(lookup), True, "Should have cycle of size 4")
+
+  def test_check_cycle2(self):
+    lookup = create_lookup(np.array([[1,0,1,0,1,0],[0,1,0,1,0,1]]))
+    self.assertEqual(check_cycle(lookup), True, "Should have no cycle of size 4")
 """
   def test_create_matrix(self):
     matrix = np.array([[1,0,0,1],[0,1,1,0]])
@@ -189,10 +244,8 @@ class TestSum(unittest.TestCase):
 #  def test_horizontal_run(self):
 #    self.assertEqual()
 if __name__ == '__main__':
-  matrix = np.array([[1,0,1,1,0,1,0,0],[1,1,0,1,0,0,0,1],[0,0,0,0,1,1,1,1],[0,1,1,0,1,0,1,0]])
-  proba = [(0.1,0.9),(0.9,0.1),(0.1,0.9),(0.1,0.9),(0.9,0.1),(0.1,0.9),(0.9,0.1),(0.1,0.9)]
-  string = [0,0,0,0,0,0,0,0]
-  lookup = create_input(matrix, proba)
+  unittest.main()
+"""
   print("============================================================================")
   lookup = horizontal_run(lookup)
   for key in lookup:
@@ -203,4 +256,5 @@ if __name__ == '__main__':
     print(f'key:{key}, value: {lookup[key]} \n')
   for car in string:
     print(f"{car} \t")
-  unittest.main()
+"""
+
