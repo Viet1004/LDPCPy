@@ -2,6 +2,7 @@ import timeit
 import LDPC
 import numpy as np
 import time
+from scipy.sparse import csc_matrix 
 
 def timerfunc(func):
     """
@@ -33,7 +34,8 @@ def run(n,w_c,w_r, probability):
 #        seed += 1
     code = np.random.choice([0,1],size = n) 
     matrix = LDPC.matrix_generation(n,w_c,w_r,seed)
-    syndrome = np.dot(matrix, code)
+    matrix1 = csc_matrix(matrix)
+    syndrome = matrix1.dot(code)
     for i in range(numberOfTest):
         received, postProba = LDPC.BSC_channel(code, crossoverProba= probability)
         verifi, res = LDPC.MessagePassing(matrix, postProba, syndrome)
