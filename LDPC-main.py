@@ -1,6 +1,7 @@
 from LDPC import MessagePassing, matrix_generation, BSC_channel
 import LDPC
 import numpy as np
+from scipy.sparse import csc_matrix 
 
 if __name__ == '__main__':
     n =  1024

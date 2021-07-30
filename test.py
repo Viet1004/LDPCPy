@@ -1,3 +1,4 @@
+from operator import pos
 import timeit
 import LDPC
 import numpy as np
@@ -16,16 +17,16 @@ def timerfunc(func):
         value = func(*args, **kwargs)
         end = time.time()
         runtime = end - start
-        msg = "The runtime for {func} took {time} seconds to complete"
+        msg = "The runtime in avarage for {func} took {time} seconds to complete"
         print(msg.format(func=func.__name__,
-                         time=runtime))
+                         time=runtime/20))
         return value
     return function_timer
 
 @profile
 @timerfunc
 def run(n,w_c,w_r, probability):
-    numberOfTest = 100
+    numberOfTest = 20
     success = 0
     seed = 10
 #    while(True):
@@ -34,27 +35,29 @@ def run(n,w_c,w_r, probability):
 #        seed += 1
     code = np.random.choice([0,1],size = n) 
     matrix = LDPC.matrix_generation(n,w_c,w_r,seed)
-    matrix1 = csc_matrix(matrix)
-    syndrome = matrix1.dot(code)
+    lookup = LDPC.create_lookup(matrix)
+    matrix = csc_matrix(matrix)
+    syndrome = matrix.dot(code)
+    
     for i in range(numberOfTest):
         received, postProba = LDPC.BSC_channel(code, crossoverProba= probability)
-        verifi, res = LDPC.MessagePassing(matrix, postProba, syndrome)
+        lookup = LDPC.create_input(lookup, postProba)
+        verifi, res = LDPC.MessagePassing(lookup, matrix, postProba, syndrome)
         if verifi:
             success += 1      
     print("======================================================================")
     print(f"There are {success} successes out of {numberOfTest} tests")
     print("======================================================================")
 
-
 def test():
-#    n1 =  [128,256,512,1024,2048]
-    n1 = [1024]
+    n1 =  [128,256,512,1024,2048]
+#    n1 = [1024]
     set1 = [(3,4)]
-#    n2 = [125,250,500,1000,2000]
-    n2 = [1000]
+    n2 = [125,250,500,1000,2000]
+#    n2 = [1000]
     set2 = [(3,5),(4,5)]
-#    n3 = [120,240,480,960,1920]
-    n3 = [960]
+    n3 = [120,240,480,960,1920]
+#    n3 = [960]
     set3 = [(4,6),(5,6)]
     proba = (0.02,0.05,0.1)
     for n in n1:

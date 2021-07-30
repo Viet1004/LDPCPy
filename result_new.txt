@@ -1,0 +1,378 @@
+n:128 w_c: 3, w_r: 4, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.020785307884216307 seconds to complete
+n:128 w_c: 3, w_r: 4, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.03637211322784424 seconds to complete
+n:128 w_c: 3, w_r: 4, p: 0.1
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.0725285530090332 seconds to complete
+n:256 w_c: 3, w_r: 4, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.05448209047317505 seconds to complete
+n:256 w_c: 3, w_r: 4, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.08614368438720703 seconds to complete
+n:256 w_c: 3, w_r: 4, p: 0.1
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.17594655752182006 seconds to complete
+n:512 w_c: 3, w_r: 4, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.13701910972595216 seconds to complete
+n:512 w_c: 3, w_r: 4, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.22324644327163695 seconds to complete
+n:512 w_c: 3, w_r: 4, p: 0.1
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.39602930545806886 seconds to complete
+n:1024 w_c: 3, w_r: 4, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.35839295387268066 seconds to complete
+n:1024 w_c: 3, w_r: 4, p: 0.05
+======================================================================
+There are 18 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.6671581745147706 seconds to complete
+n:1024 w_c: 3, w_r: 4, p: 0.1
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.9460553169250489 seconds to complete
+n:2048 w_c: 3, w_r: 4, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.119748044013977 seconds to complete
+n:2048 w_c: 3, w_r: 4, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.367321527004242 seconds to complete
+n:2048 w_c: 3, w_r: 4, p: 0.1
+======================================================================
+There are 18 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 2.2612760424613954 seconds to complete
+n:125 w_c: 3, w_r: 5, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.02567042112350464 seconds to complete
+n:125 w_c: 3, w_r: 5, p: 0.05
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.054989850521087645 seconds to complete
+n:125 w_c: 3, w_r: 5, p: 0.1
+======================================================================
+There are 8 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.17718520164489746 seconds to complete
+n:125 w_c: 4, w_r: 5, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.02704061269760132 seconds to complete
+n:125 w_c: 4, w_r: 5, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.044336485862731936 seconds to complete
+n:125 w_c: 4, w_r: 5, p: 0.1
+======================================================================
+There are 15 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.13535697460174562 seconds to complete
+n:250 w_c: 3, w_r: 5, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.06043332815170288 seconds to complete
+n:250 w_c: 3, w_r: 5, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.12238951921463012 seconds to complete
+n:250 w_c: 3, w_r: 5, p: 0.1
+======================================================================
+There are 16 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.31033953428268435 seconds to complete
+n:250 w_c: 4, w_r: 5, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.06014823913574219 seconds to complete
+n:250 w_c: 4, w_r: 5, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.09106876850128173 seconds to complete
+n:250 w_c: 4, w_r: 5, p: 0.1
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.21131083965301514 seconds to complete
+n:500 w_c: 3, w_r: 5, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.1472267985343933 seconds to complete
+n:500 w_c: 3, w_r: 5, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.24645164012908935 seconds to complete
+n:500 w_c: 3, w_r: 5, p: 0.1
+======================================================================
+There are 15 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.6884567737579346 seconds to complete
+n:500 w_c: 4, w_r: 5, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.15676400661468506 seconds to complete
+n:500 w_c: 4, w_r: 5, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.26293946504592897 seconds to complete
+n:500 w_c: 4, w_r: 5, p: 0.1
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.4518712520599365 seconds to complete
+n:1000 w_c: 3, w_r: 5, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.4140063047409058 seconds to complete
+n:1000 w_c: 3, w_r: 5, p: 0.05
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.6882679343223572 seconds to complete
+n:1000 w_c: 3, w_r: 5, p: 0.1
+======================================================================
+There are 15 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.621181106567383 seconds to complete
+n:1000 w_c: 4, w_r: 5, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.4324380874633789 seconds to complete
+n:1000 w_c: 4, w_r: 5, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.5726423859596252 seconds to complete
+n:1000 w_c: 4, w_r: 5, p: 0.1
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.9886283040046692 seconds to complete
+n:2000 w_c: 3, w_r: 5, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.0550970196723939 seconds to complete
+n:2000 w_c: 3, w_r: 5, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.4323624849319458 seconds to complete
+n:2000 w_c: 3, w_r: 5, p: 0.1
+======================================================================
+There are 14 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 3.703041732311249 seconds to complete
+n:2000 w_c: 4, w_r: 5, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.2274458169937135 seconds to complete
+n:2000 w_c: 4, w_r: 5, p: 0.05
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.7981583237648011 seconds to complete
+n:2000 w_c: 4, w_r: 5, p: 0.1
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 2.379743194580078 seconds to complete
+n:120 w_c: 4, w_r: 6, p: 0.02
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.034015190601348874 seconds to complete
+n:120 w_c: 4, w_r: 6, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.04329425096511841 seconds to complete
+n:120 w_c: 4, w_r: 6, p: 0.1
+======================================================================
+There are 11 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.19453485012054444 seconds to complete
+n:120 w_c: 5, w_r: 6, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.036033105850219724 seconds to complete
+n:120 w_c: 5, w_r: 6, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.05428086519241333 seconds to complete
+n:120 w_c: 5, w_r: 6, p: 0.1
+======================================================================
+There are 17 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.16497223377227782 seconds to complete
+n:240 w_c: 4, w_r: 6, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.057628321647644046 seconds to complete
+n:240 w_c: 4, w_r: 6, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.11479805707931519 seconds to complete
+n:240 w_c: 4, w_r: 6, p: 0.1
+======================================================================
+There are 11 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.4257175445556641 seconds to complete
+n:240 w_c: 5, w_r: 6, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.08035155534744262 seconds to complete
+n:240 w_c: 5, w_r: 6, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.11113628149032592 seconds to complete
+n:240 w_c: 5, w_r: 6, p: 0.1
+======================================================================
+There are 18 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.3004178285598755 seconds to complete
+n:480 w_c: 4, w_r: 6, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.15837928056716918 seconds to complete
+n:480 w_c: 4, w_r: 6, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.26350682973861694 seconds to complete
+n:480 w_c: 4, w_r: 6, p: 0.1
+======================================================================
+There are 14 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.8395899653434753 seconds to complete
+n:480 w_c: 5, w_r: 6, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.1782459020614624 seconds to complete
+n:480 w_c: 5, w_r: 6, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.283458948135376 seconds to complete
+n:480 w_c: 5, w_r: 6, p: 0.1
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.579279363155365 seconds to complete
+n:960 w_c: 4, w_r: 6, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.42826018333435056 seconds to complete
+n:960 w_c: 4, w_r: 6, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.6152897238731384 seconds to complete
+n:960 w_c: 4, w_r: 6, p: 0.1
+======================================================================
+There are 18 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.5958608746528626 seconds to complete
+n:960 w_c: 5, w_r: 6, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.513114869594574 seconds to complete
+n:960 w_c: 5, w_r: 6, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.7025281667709351 seconds to complete
+n:960 w_c: 5, w_r: 6, p: 0.1
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.2901638746261597 seconds to complete
+n:1920 w_c: 4, w_r: 6, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.1654203891754151 seconds to complete
+n:1920 w_c: 4, w_r: 6, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.6416841983795165 seconds to complete
+n:1920 w_c: 4, w_r: 6, p: 0.1
+======================================================================
+There are 15 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 4.0255969047546385 seconds to complete
+n:1920 w_c: 5, w_r: 6, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.4791837334632874 seconds to complete
+n:1920 w_c: 5, w_r: 6, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.8162516713142396 seconds to complete
+n:1920 w_c: 5, w_r: 6, p: 0.1
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 2.7873259782791138 seconds to complete
+mprof: Sampling memory every 0.1s
+running new process
+running as a Python program...
