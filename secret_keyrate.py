@@ -17,7 +17,7 @@ def draw_graph():
         y_set = [secret_keyrate(p,x) for x in x_set]
 #        print("X_set:", x_set)
 #        print("Y_set:", y_set)
-        plt.figure(i)
+#        plt.figure(i)
         i += 1
         plt.plot(x_set,y_set, label = f"p = {p}")
         plt.ylabel("secret key rate")
