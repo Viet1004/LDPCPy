@@ -1,0 +1,18 @@
+n:16384 w_c: 4, w_r: 8, p: 0.02
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 8.481023800373077 seconds to complete
+n:16384 w_c: 4, w_r: 8, p: 0.05
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 16.904329335689546 seconds to complete
+n:16384 w_c: 4, w_r: 8, p: 0.1
+======================================================================
+There are 0 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 55.7406005859375 seconds to complete
+mprof: Sampling memory every 0.1s
+running new process
+running as a Python program...

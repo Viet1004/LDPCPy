@@ -10,7 +10,8 @@ Original file is located at
 import numpy as np
 import unittest
 import random
-from scipy.sparse import csc_matrix 
+from scipy.sparse import csr_matrix, data 
+from scipy.sparse import vstack
 
 class Data:
   def __init__(self, neighborC, neighborR, q_0 = 1 , q_1 = 1, r_0 = 1, r_1 = 1):
@@ -35,20 +36,29 @@ def matrix_generation(n: int,w_c :int, w_r: int, seed):
     note: w_c < w_r
   """
   
-  while(n % w_r != 0):
-    print("Please make sure that w_r divides n!")
-  m = n*w_c/w_r
-  matrix = np.zeros((n//w_r, n), dtype=int)
-  matrix_clone = np.copy(matrix)
-  for i in range(n//w_r):
-    matrix[i][i*w_r:(i+1)*w_r] = 1
-  matrix_clone = np.copy(matrix)
-  for i in range(w_c-1):
-    b = np.random.RandomState(seed = seed*i).permutation(n)
-    temp = np.zeros((n//w_r, n), dtype=int)
-    for j in range(n):
-      temp[:,j] = matrix_clone[:,b[j]]
-    matrix = np.concatenate((matrix, temp), axis = 0)
+#  while(n % w_r != 0):
+#    print("Please make sure that w_r divides n!")
+#  m = n*w_c/w_r
+#  matrix = np.zeros((n//w_r, n), dtype=int)
+#  matrix_clone = np.copy(matrix)
+#  for i in range(n//w_r):
+#    matrix[i][i*w_r:(i+1)*w_r] = 1
+#  matrix_clone = np.copy(matrix)
+#  for i in range(w_c-1):
+#    b = np.random.RandomState(seed = seed*i).permutation(n)
+#    temp = np.zeros((n//w_r, n), dtype=int)
+#    for j in range(n):
+#      temp[:,j] = matrix_clone[:,b[j]]
+#    matrix = np.concatenate((matrix, temp), axis = 0)
+#  return matrix
+  data = np.ones(n)
+  indptr = np.arange(0,n+1,w_r)
+  indices = np.arange(n)
+  matrix = csr_matrix((data,indices,indptr))
+  for i in range(w_c -1):
+    temp = np.copy(indices)
+    np.random.RandomState(seed = seed*i).shuffle(temp)
+    matrix = vstack([matrix,csr_matrix((data, temp, indptr))])
   return matrix
 
 def BSC_channel(code, crossoverProba: float):
@@ -64,24 +74,53 @@ def BSC_channel(code, crossoverProba: float):
       postProba.append((crossoverProba, 1- crossoverProba))
   return res, postProba
 
-def create_lookup(matrix):
-  m,n = np.shape(matrix)
+def create_lookup(matrix,w_r, w_c):
+#  m,n = np.shape(matrix)
+#  lookup = {}
+##  string = np.zeros(shape= n , dtype=float)
+#  for i in range(m):
+#    for j in range(n):
+#      if matrix[i][j] == 1:
+#        neighborR = []
+#        neighborC = []
+#        for k in range(n):
+#          if matrix[i][k] == 1 and j != k:    
+#            neighborR.append((i,k))
+#        for k in range(m):
+#          if matrix[k][j] == 1 and i != k:
+#            neighborC.append((k,j))
+#        data = Data(neighborC = neighborC, neighborR= neighborR)
+#        lookup[(i,j)] = data
+#  return lookup
+
+  m,n = matrix.get_shape()
   lookup = {}
-#  string = np.zeros(shape= n , dtype=float)
+  # we first remap the row of H to the neighborR of the lookup 
   for i in range(m):
-    for j in range(n):
-      if matrix[i][j] == 1:
-        neighborR = []
+    R = matrix.getrow(i).tocoo().col
+    for k in range(w_r):
+      neighborR1 = np.delete(R,k) 
+      neighborR = []
+      for l in range(w_r-1):
+        neighborR.append((i,neighborR1[l]))
+      data = Data(neighborC = [], neighborR = neighborR, q_0 = 0, q_1 = 0, r_0 = 0, r_1 = 0)
+      lookup[(i,R[k])] = data
+      #print(lookup)
+  for x in lookup:
+    if not lookup[x].neighborC:
+      (i,j) = x
+      #print(f'x {x}')
+      C = matrix.getcol(j).tocoo().row
+      for k in range(w_c):
+        neighborC1 = np.delete(C,k) 
         neighborC = []
-        for k in range(n):
-          if matrix[i][k] == 1 and j != k:    
-            neighborR.append((i,k))
-        for k in range(m):
-          if matrix[k][j] == 1 and i != k:
-            neighborC.append((k,j))
-        data = Data(neighborC = neighborC, neighborR= neighborR)
-        lookup[(i,j)] = data
+        for l in range(w_c-1):
+          neighborC.append((neighborC1[l],j))
+        data = lookup[(C[k],j)]
+        data.neighborC = neighborC
   return lookup
+
+# then we remap the columns of H to the neighborR field of the lookup
 
 def create_input(lookup, proba):
 #  string = np.zeros(shape= n , dtype=float)
@@ -168,7 +207,7 @@ def verification(matrix, check, syndrome):
   """ 
   return not np.any((matrix.dot(check)-syndrome)%2)
 
-def MessagePassing(lookup,matrix, proba, syndrome, number_Iter = 20):
+def MessagePassing(lookup,matrix, proba, syndrome, number_Iter = 60):
   """
     Algorithm of message passing or belief propagation
   """

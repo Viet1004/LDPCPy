@@ -23,10 +23,10 @@ def timerfunc(func):
         return value
     return function_timer
 
-@profile
+#@profile
 @timerfunc
-def run(n,w_c,w_r, probability):
-    numberOfTest = 20
+def run(n,w_c,w_r, probability,numberOfTest = 20):
+    startPreparation = time.time()
     success = 0
     seed = 10
 #    while(True):
@@ -35,48 +35,54 @@ def run(n,w_c,w_r, probability):
 #        seed += 1
     code = np.random.choice([0,1],size = n) 
     matrix = LDPC.matrix_generation(n,w_c,w_r,seed)
-    lookup = LDPC.create_lookup(matrix)
-    matrix = csc_matrix(matrix)
+    lookup = LDPC.create_lookup(matrix,w_r, w_c)
+#    matrix = csc_matrix(matrix)
     syndrome = matrix.dot(code)
-    
+    endPreparation = time.time()
+
+    print(f"Preparation time is : {endPreparation - startPreparation}")
+
+    startExecution = time.time()
     for i in range(numberOfTest):
         received, postProba = LDPC.BSC_channel(code, crossoverProba= probability)
-        lookup = LDPC.create_input(lookup, postProba)
-        verifi, res = LDPC.MessagePassing(lookup, matrix, postProba, syndrome)
+        lookup_with_proba = LDPC.create_input(lookup, postProba)
+        verifi, res = LDPC.MessagePassing(lookup_with_proba, matrix, postProba, syndrome)
         if verifi:
             success += 1      
+    endExecution = time.time()
+    print(f"Execution time in avarage is : {-(startExecution-endExecution)/numberOfTest}")
     print("======================================================================")
     print(f"There are {success} successes out of {numberOfTest} tests")
     print("======================================================================")
 
 def test():
-    n1 =  [128,256,512,1024,2048]
-#    n1 = [1024]
-    set1 = [(3,4)]
+#    n1 =  [128,256,512,1024,2048]
+    n1 = [16384]
+    set1 = [(4,8)]
     n2 = [125,250,500,1000,2000]
 #    n2 = [1000]
     set2 = [(3,5),(4,5)]
     n3 = [120,240,480,960,1920]
 #    n3 = [960]
     set3 = [(4,6),(5,6)]
-    proba = (0.02,0.05,0.1)
+    proba = (0.02,0.05,0.08)
     for n in n1:
         for set in set1:
             for p in proba:
                 print(f"n:{n} w_c: {set[0]}, w_r: {set[1]}, p: {p}")
                 run(n,set[0],set[1],p)
 
-    for n in n2:
-        for set in set2:
-            for p in proba:
-                print(f"n:{n} w_c: {set[0]}, w_r: {set[1]}, p: {p}")
-                run(n,set[0],set[1],p)
-    
-    for n in n3:
-        for set in set3:
-            for p in proba:
-                print(f"n:{n} w_c: {set[0]}, w_r: {set[1]}, p: {p}")
-                run(n,set[0],set[1],p)
+#    for n in n2:
+#        for set in set2:
+#            for p in proba:
+#                print(f"n:{n} w_c: {set[0]}, w_r: {set[1]}, p: {p}")
+#                run(n,set[0],set[1],p)
+#    
+#    for n in n3:
+#        for set in set3:
+#            for p in proba:
+#                print(f"n:{n} w_c: {set[0]}, w_r: {set[1]}, p: {p}")
+#                run(n,set[0],set[1],p)
 
 if __name__ == "__main__":
     test()
