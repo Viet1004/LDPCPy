@@ -10,8 +10,9 @@ Original file is located at
 import numpy as np
 import unittest
 import random
-from scipy.sparse import csr_matrix, data 
+from scipy.sparse import csr_matrix, data, coo_matrix
 from scipy.sparse import vstack
+import math
 
 class Data:
   def __init__(self, neighborC, neighborR, q_0 = 1 , q_1 = 1, r_0 = 1, r_1 = 1):
@@ -26,6 +27,93 @@ class Data:
    
   def __repr__(self):
     return f'neighborC: {self.neighborC} \n neighborR: {self.neighborR} \n ({self.q_0},{self.q_1}) \n ({self.r_0,self.r_1}) \n'
+
+class Data_MinSum:
+  def __init__(self, neighborC, neighborR, L, Z):
+    self.neighborC = neighborC
+    self.neighborR = neighborR
+    self.L = L
+    self.Z = Z
+
+def BFS_simple(graph, node, m,n):
+  """
+  This one only works for our purpose!!! It's not a BFS algo in general
+  Output: The set of checknode which are not included in the tree of node (sort of)
+  """
+  checkPassed = []
+  queueCheck = []
+  variablePassed = [node]
+  queueVariable = [node]
+  while(True):
+    temp1 = []
+    temp2 = []
+    for variableNode in queueVariable:
+      temp1 = list(set(temp1) | set(graph[variableNode]))
+#    print(f"Node: {node}, graph: {graph}")
+    temp1 = list(set(temp1) | set(checkPassed))
+    if set(temp1) == set([i for i in np.arange(n,m+n, dtype=int)]) or set(temp1) == set(checkPassed):
+#      print("About to return:")
+#      print(set([x for x in np.arange(n,n+m)]))
+#      print(list(set([x for x in np.arange(n,n+m)]) - set(checkPassed)))
+      return list(set([x for x in np.arange(n,n+m)]) - set(checkPassed))
+    else:
+      queueCheck = list(set(temp1) - set(checkPassed))
+      checkPassed = temp1
+#      print("Check node Queue")    
+#      print(queueCheck)
+#      print(checkPassed)
+#    print("===========This is between checknode and variablenode==============")
+    for checkNode in queueCheck:
+      temp2 = list(set(temp2) | set(graph[checkNode]))
+#      print(graph[checkNode])
+#      print(temp2)
+    temp2 = list(set(temp2) | set(variablePassed))
+    queueVariable = list(set(temp2) - set(variablePassed))
+#    print("=====")
+#    print(variablePassed)
+
+    variablePassed = temp2
+#    print("Variable node Queue")
+#    print(queueVariable)
+#    print(variablePassed)
+
+def matrix_generation_PEG(degreeOfVNode, m, n):
+  checkNode = np.zeros(m)
+  graph = []
+  for i in range(n+m):
+    graph.append([])
+  data = np.ones(sum(degreeOfVNode), dtype=np.int8)
+  row = np.array([], dtype=int)
+  col = np.array([], dtype=int)
+  for i in range(n):
+#    print(f"=====================  i = {i}  ========================")
+    for j in range(degreeOfVNode[i]):
+      if j == 0:
+        ind = np.argmin(checkNode)
+        checkNode[ind] += 1
+        row = np.append(row, ind)
+        col = np.append(col, i)
+        graph[i].append(int(n+ind))
+        graph[n+ind].append(i)
+      else:
+#        print("Inside BFS")
+        complementCheckNode = [x - n for x in BFS_simple(graph, i, m,n)]
+#        print("End of BFS")
+#        print("==================================")
+#        print(complementCheckNode)
+#        print("==================================")
+        degreeOfLeftCheckNode = [checkNode[x] for x in complementCheckNode]
+#        print(degreeOfLeftCheckNode)
+        ind = complementCheckNode[list(degreeOfLeftCheckNode).index(min(degreeOfLeftCheckNode))]
+#        print(f"index chosen is : {ind}")
+        checkNode[ind] += 1
+#        print(f"degree of all check node is : {checkNode}")
+        row = np.append(row, ind)
+        col = np.append(col, i)    
+        graph[i].append(n+ind)
+        graph[n+ind].append(i)
+#      print(checkNode)
+  return coo_matrix((data, (row, col)), dtype=np.int8).tocsr()
 
 def matrix_generation(n: int,w_c :int, w_r: int, seed):
   """
@@ -54,11 +142,11 @@ def matrix_generation(n: int,w_c :int, w_r: int, seed):
   data = np.ones(n)
   indptr = np.arange(0,n+1,w_r)
   indices = np.arange(n)
-  matrix = csr_matrix((data,indices,indptr))
+  matrix = csr_matrix((data,indices,indptr), dtype=np.int8)
   for i in range(w_c -1):
     temp = np.copy(indices)
     np.random.RandomState(seed = seed*i).shuffle(temp)
-    matrix = vstack([matrix,csr_matrix((data, temp, indptr))])
+    matrix = vstack([matrix,csr_matrix((data, temp, indptr), dtype=np.int8)])
   return matrix
 
 def BSC_channel(code, crossoverProba: float):
@@ -74,7 +162,7 @@ def BSC_channel(code, crossoverProba: float):
       postProba.append((crossoverProba, 1- crossoverProba))
   return res, postProba
 
-def create_lookup(matrix,w_r, w_c):
+def create_lookup(matrix):
 #  m,n = np.shape(matrix)
 #  lookup = {}
 ##  string = np.zeros(shape= n , dtype=float)
@@ -98,6 +186,7 @@ def create_lookup(matrix,w_r, w_c):
   # we first remap the row of H to the neighborR of the lookup 
   for i in range(m):
     R = matrix.getrow(i).tocoo().col
+    w_r = len(R)
     for k in range(w_r):
       neighborR1 = np.delete(R,k) 
       neighborR = []
@@ -111,6 +200,7 @@ def create_lookup(matrix,w_r, w_c):
       (i,j) = x
       #print(f'x {x}')
       C = matrix.getcol(j).tocoo().row
+      w_c = len(C)
       for k in range(w_c):
         neighborC1 = np.delete(C,k) 
         neighborC = []
@@ -122,6 +212,55 @@ def create_lookup(matrix,w_r, w_c):
 
 # then we remap the columns of H to the neighborR field of the lookup
 
+def create_lookup(matrix):
+#  m,n = np.shape(matrix)
+#  lookup = {}
+##  string = np.zeros(shape= n , dtype=float)
+#  for i in range(m):
+#    for j in range(n):
+#      if matrix[i][j] == 1:
+#        neighborR = []
+#        neighborC = []
+#        for k in range(n):
+#          if matrix[i][k] == 1 and j != k:    
+#            neighborR.append((i,k))
+#        for k in range(m):
+#          if matrix[k][j] == 1 and i != k:
+#            neighborC.append((k,j))
+#        data = Data(neighborC = neighborC, neighborR= neighborR)
+#        lookup[(i,j)] = data
+#  return lookup
+
+  m,n = matrix.get_shape()
+  lookup = {}
+  # we first remap the row of H to the neighborR of the lookup 
+  for i in range(m):
+    R = matrix.getrow(i).tocoo().col
+    w_r = len(R)
+    for k in range(w_r):
+      neighborR1 = np.delete(R,k) 
+      neighborR = []
+      for l in range(w_r-1):
+        neighborR.append((i,neighborR1[l]))
+      data = Data(neighborC = [], neighborR = neighborR, q_0 = 0, q_1 = 0, r_0 = 0, r_1 = 0)
+      lookup[(i,R[k])] = data
+      #print(lookup)
+  for x in lookup:
+    if not lookup[x].neighborC:
+      (i,j) = x
+      #print(f'x {x}')
+      C = matrix.getcol(j).tocoo().row
+      w_c = len(C)
+      for k in range(w_c):
+        neighborC1 = np.delete(C,k) 
+        neighborC = []
+        for l in range(w_c-1):
+          neighborC.append((neighborC1[l],j))
+        data = lookup[(C[k],j)]
+        data.neighborC = neighborC
+  return lookup
+
+
 def create_input(lookup, proba):
 #  string = np.zeros(shape= n , dtype=float)
   for key in lookup:
@@ -132,23 +271,43 @@ def create_input(lookup, proba):
 #    print(f'key:{key}, value: {lookup[key]} \n')
   return lookup
 
-def check_cycle(lookup: dict):
-  check_node = []
+#Create input for log function
+def create_input_log(lookup, proba):
+  for key in lookup:
+    lookup[key].L = math.log(proba[key[1]][0]/proba[key[1]][0])
+  return lookup
+
+def count_cycle_size_four(lookup: dict):
+  checkedNode = []
+  cycleSizeFour = 0
   for x in lookup:
-    check_node.append(x)
+    checkedNode.append(x)
     for neighbor_row in lookup[x].neighborR:
-      if neighbor_row in check_node:
+      if neighbor_row in checkedNode:
         continue
       for neighbor_col in lookup[neighbor_row].neighborC:
-        if neighbor_row in check_node:
+        if neighbor_row in checkedNode:
           continue
         for neighbor_row2 in lookup[neighbor_col].neighborR:
-          if neighbor_row2 in check_node:
+          if neighbor_row2 in checkedNode:
             continue
           for neighbor_col2 in lookup[neighbor_row2].neighborC:
             if neighbor_col2 == x:
-              return False
-  return True
+              cycleSizeFour += 1
+  return cycleSizeFour
+
+# Log likelihood implementation
+
+def horizontal_run_log(lookup, syndrome):
+  for x in lookup:
+    res = 1
+    for row_neighbor in lookup[x].neighborR:
+      res *= math.tanh(lookup[row_neighbor].Z/2)
+    lookup[x].L = ((-1)**syndrome[x[0]])*2*math.atanh(res)
+  return lookup
+
+
+
 
 def horizontal_run(lookup, syndrome):
   """
@@ -163,6 +322,23 @@ def horizontal_run(lookup, syndrome):
     lookup[x].r_1 = round((1-(-1)**syndrome[x[0]]*res)/2,5)
 #  print(lookup)
   return lookup
+
+#Log likelihood implementation
+def vertical_run_log(lookup, Post_proba, string):
+  positionCheck = np.zeros(len(string)) > 1
+  for x in lookup:
+    Z = math.log(Post_proba[x[1]][0]/Post_proba[x[1]][1])
+    for col_neighbor in lookup[x].neighborC:
+      Z += lookup[col_neighbor].L
+    lookup[x].Z = Z
+    if not positionCheck[x[1]]:
+      Z += lookup[x].L
+      positionCheck[x[1]] = True
+      if Z > 0:
+        string[x[1]] = 0
+      else:
+        string[x[1]] = 1
+  return (lookup, string)
 
 def vertical_run(lookup, post_proba, string):
   """
@@ -186,10 +362,10 @@ def vertical_run(lookup, post_proba, string):
       q_1 *= lookup[x].r_1
 #    print(f"At n = {x[1]}, q0 is {q_0}, q1 is {q_1}")
       positionCheck[x[1]] = True
-    if q_1 > q_0:
-      string[x[1]] = 1
-    else:
-      string[x[1]] = 0
+      if q_1 > q_0:
+        string[x[1]] = 1
+      else:
+        string[x[1]] = 0
 #    posterioproba[x[1]] = round(q_0/(q_0+q_1),2)
 #  print(lookup)
 #  print(posterioproba)
@@ -207,6 +383,33 @@ def verification(matrix, check, syndrome):
   """ 
   return not np.any((matrix.dot(check)-syndrome)%2)
 
+def MessagePassing_log(lookup,matrix, proba, syndrome, number_Iter = 60):
+  """
+    Algorithm of message passing or belief propagation
+  """
+#  lookup = create_input(matrix, proba)
+  _,n = np.shape(matrix)
+  
+#  if check_cycle(lookup) == False:
+#    print("There is a cycle is size 4 in the matrix")
+#    return (False, None)
+  
+  string = np.zeros(shape = n, dtype = np.int8)
+  for i in range(number_Iter):
+#    print("round: {}".format(i))
+#    print("=======================Horizontal Round===========================")
+    lookup = horizontal_run_log(lookup, syndrome)
+#    print("=======================Vertical Round===========================")
+    (lookup, string) = vertical_run_log(lookup, proba,string)
+    if verification(matrix, string, syndrome):
+  #    print("success")
+      print(f"The number of Iteration is : {i}")
+      return (True, string)
+    else:
+      continue
+  #print("Failure")
+  return (False, None)
+
 def MessagePassing(lookup,matrix, proba, syndrome, number_Iter = 60):
   """
     Algorithm of message passing or belief propagation
@@ -218,7 +421,7 @@ def MessagePassing(lookup,matrix, proba, syndrome, number_Iter = 60):
 #    print("There is a cycle is size 4 in the matrix")
 #    return (False, None)
   
-  string = np.zeros(shape = n, dtype = float)
+  string = np.zeros(shape = n, dtype = np.int8)
   for i in range(number_Iter):
 #    print("round: {}".format(i))
 #    print("=======================Horizontal Round===========================")
@@ -227,6 +430,7 @@ def MessagePassing(lookup,matrix, proba, syndrome, number_Iter = 60):
     (lookup, string) = vertical_run(lookup, proba,string)
     if verification(matrix, string, syndrome):
   #    print("success")
+      print(f"The number of Iteration is : {i}")
       return (True, string)
     else:
       continue
