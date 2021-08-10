@@ -7,6 +7,8 @@ Original file is located at
     https://colab.research.google.com/drive/1kMIE40RJjMRAxOQ6Fbk6RZSKX_e48-ig
 """
 
+# Z ~ q, L ~ r
+
 import numpy as np
 import unittest
 import random
@@ -15,18 +17,16 @@ from scipy.sparse import vstack
 import math
 
 class Data:
-  def __init__(self, neighborC, neighborR, q_0 = 1 , q_1 = 1, r_0 = 1, r_1 = 1):
+  def __init__(self, neighborC, neighborR, q_0 = 1 , r_0 = 1):
     self.neighborC = neighborC
     self.neighborR = neighborR
     self.q_0 = q_0
-    self.q_1 = q_1
     self.r_0 = r_0
-    self.r_1 = r_1
 #    || 0 || 1 || 2 || 3 || 4 || 5 || 6 || 7 ||
 #      0,1  1,3 
    
   def __repr__(self):
-    return f'neighborC: {self.neighborC} \n neighborR: {self.neighborR} \n ({self.q_0},{self.q_1}) \n ({self.r_0,self.r_1}) \n'
+    return f'neighborC: {self.neighborC} \n neighborR: {self.neighborR} \n ({self.q_0}) \n ({self.r_0}) \n'
 
 class Data_MinSum:
   def __init__(self, neighborC, neighborR, L, Z):
@@ -157,9 +157,9 @@ def BSC_channel(code, crossoverProba: float):
     if random.random() < crossoverProba:
       res[i] = int((code[i]+1)%2)
     if res[i] == 0:
-      postProba.append((1-crossoverProba, crossoverProba))
+      postProba.append(1-crossoverProba)
     else:
-      postProba.append((crossoverProba, 1- crossoverProba))
+      postProba.append(crossoverProba)
   return res, postProba
 
 def create_lookup(matrix):
@@ -192,7 +192,7 @@ def create_lookup(matrix):
       neighborR = []
       for l in range(w_r-1):
         neighborR.append((i,neighborR1[l]))
-      data = Data(neighborC = [], neighborR = neighborR, q_0 = 0, q_1 = 0, r_0 = 0, r_1 = 0)
+      data = Data(neighborC = [], neighborR = neighborR, q_0 = 0, r_0 = 0)
       lookup[(i,R[k])] = data
       #print(lookup)
   for x in lookup:
@@ -212,60 +212,11 @@ def create_lookup(matrix):
 
 # then we remap the columns of H to the neighborR field of the lookup
 
-def create_lookup(matrix):
-#  m,n = np.shape(matrix)
-#  lookup = {}
-##  string = np.zeros(shape= n , dtype=float)
-#  for i in range(m):
-#    for j in range(n):
-#      if matrix[i][j] == 1:
-#        neighborR = []
-#        neighborC = []
-#        for k in range(n):
-#          if matrix[i][k] == 1 and j != k:    
-#            neighborR.append((i,k))
-#        for k in range(m):
-#          if matrix[k][j] == 1 and i != k:
-#            neighborC.append((k,j))
-#        data = Data(neighborC = neighborC, neighborR= neighborR)
-#        lookup[(i,j)] = data
-#  return lookup
-
-  m,n = matrix.get_shape()
-  lookup = {}
-  # we first remap the row of H to the neighborR of the lookup 
-  for i in range(m):
-    R = matrix.getrow(i).tocoo().col
-    w_r = len(R)
-    for k in range(w_r):
-      neighborR1 = np.delete(R,k) 
-      neighborR = []
-      for l in range(w_r-1):
-        neighborR.append((i,neighborR1[l]))
-      data = Data(neighborC = [], neighborR = neighborR, q_0 = 0, q_1 = 0, r_0 = 0, r_1 = 0)
-      lookup[(i,R[k])] = data
-      #print(lookup)
-  for x in lookup:
-    if not lookup[x].neighborC:
-      (i,j) = x
-      #print(f'x {x}')
-      C = matrix.getcol(j).tocoo().row
-      w_c = len(C)
-      for k in range(w_c):
-        neighborC1 = np.delete(C,k) 
-        neighborC = []
-        for l in range(w_c-1):
-          neighborC.append((neighborC1[l],j))
-        data = lookup[(C[k],j)]
-        data.neighborC = neighborC
-  return lookup
-
-
 def create_input(lookup, proba):
 #  string = np.zeros(shape= n , dtype=float)
   for key in lookup:
-      lookup[key].q_0 = proba[key[1]][0]
-      lookup[key].q_1 = proba[key[1]][1]
+      lookup[key].q_0 = proba[key[1]]
+      
 
 #  for key in lookup:
 #    print(f'key:{key}, value: {lookup[key]} \n')
@@ -274,7 +225,7 @@ def create_input(lookup, proba):
 #Create input for log function
 def create_input_log(lookup, proba):
   for key in lookup:
-    lookup[key].L = math.log(proba[key[1]][0]/proba[key[1]][0])
+    lookup[key].q_0 = math.log(proba[key[1]]/(1-proba[key[1]]))
   return lookup
 
 def count_cycle_size_four(lookup: dict):
@@ -302,11 +253,23 @@ def horizontal_run_log(lookup, syndrome):
   for x in lookup:
     res = 1
     for row_neighbor in lookup[x].neighborR:
-      res *= math.tanh(lookup[row_neighbor].Z/2)
-    lookup[x].L = ((-1)**syndrome[x[0]])*2*math.atanh(res)
+      res *= math.tanh(lookup[row_neighbor].q_0/2)
+#    print(f"Res is :{res}")
+    lookup[x].r_0 = ((-1)**syndrome[x[0]])*2*math.atanh(res)
   return lookup
 
-
+def horizontal_run_log_MinSum(lookup, syndrome):
+  for x in lookup:
+    res = 1
+    minZ = np.inf
+    for row_neighbor in lookup[x].neighborR:
+#      res *= math.tanh(lookup[row_neighbor].q_0/2)
+      if minZ > lookup[row_neighbor].q_0:
+        minZ = lookup[row_neighbor].q_0
+      res *= np.sign(lookup[row_neighbor].q_0)
+#    print(f"Res is :{res}")
+    lookup[x].r_0 = minZ*(-1)**syndrome[x[0]]
+  return lookup
 
 
 def horizontal_run(lookup, syndrome):
@@ -317,9 +280,9 @@ def horizontal_run(lookup, syndrome):
   for x in lookup:
     res = 1
     for row_neighbor in lookup[x].neighborR:
-       res *= lookup[row_neighbor].q_0 - lookup[row_neighbor].q_1
-    lookup[x].r_0 = round((1+(-1)**syndrome[x[0]]*res)/2,5)   #(-1)^(syndrom)
-    lookup[x].r_1 = round((1-(-1)**syndrome[x[0]]*res)/2,5)
+       res *= 2*lookup[row_neighbor].q_0 - 1
+    lookup[x].r_0 = (1+(-1)**syndrome[x[0]]*res)/2   #(-1)^(syndrom)
+#    lookup[x].r_1 = round((1-(-1)**syndrome[x[0]]*res)/2,5)
 #  print(lookup)
   return lookup
 
@@ -327,14 +290,14 @@ def horizontal_run(lookup, syndrome):
 def vertical_run_log(lookup, Post_proba, string):
   positionCheck = np.zeros(len(string)) > 1
   for x in lookup:
-    Z = math.log(Post_proba[x[1]][0]/Post_proba[x[1]][1])
+    Z = math.log(Post_proba[x[1]]/(1-Post_proba[x[1]]))
     for col_neighbor in lookup[x].neighborC:
-      Z += lookup[col_neighbor].L
-    lookup[x].Z = Z
+      Z += lookup[col_neighbor].r_0     # Z ~ q, L ~ r
+    lookup[x].q_0 = Z
     if not positionCheck[x[1]]:
-      Z += lookup[x].L
+      Z += lookup[x].r_0
       positionCheck[x[1]] = True
-      if Z > 0:
+      if Z >= 0:
         string[x[1]] = 0
       else:
         string[x[1]] = 1
@@ -349,20 +312,18 @@ def vertical_run(lookup, post_proba, string):
   posterioproba = {}
   positionCheck = np.zeros(len(string)) > 1
   for x in lookup:
-    q_0 = post_proba[x[1]][0]
-    q_1 = post_proba[x[1]][1]
+    q_0 = post_proba[x[1]]
+    q_1 = 1 - post_proba[x[1]]
     for col_neighbor in lookup[x].neighborC:
       q_0 *= lookup[col_neighbor].r_0
-      q_1 *= lookup[col_neighbor].r_1
+      q_1 *= 1 - lookup[col_neighbor].r_0
     temp = q_0 + q_1
-    lookup[x].q_0 = round(q_0/temp,5)
-    lookup[x].q_1 = round(q_1/temp,5)
+    lookup[x].q_0 = q_0/temp
     if not positionCheck[x[1]]:
-      q_0 *= lookup[x].r_0
-      q_1 *= lookup[x].r_1
+      q_0 = lookup[x].r_0*q_0/(lookup[x].r_0*q_0+(1-lookup[x].r_0)*(1-q_0))
 #    print(f"At n = {x[1]}, q0 is {q_0}, q1 is {q_1}")
       positionCheck[x[1]] = True
-      if q_1 > q_0:
+      if q_0 < 0.5 :
         string[x[1]] = 1
       else:
         string[x[1]] = 0
@@ -383,7 +344,7 @@ def verification(matrix, check, syndrome):
   """ 
   return not np.any((matrix.dot(check)-syndrome)%2)
 
-def MessagePassing_log(lookup,matrix, proba, syndrome, number_Iter = 60):
+def MessagePassing_log(lookup,matrix, proba, syndrome, number_Iter = 120):
   """
     Algorithm of message passing or belief propagation
   """
