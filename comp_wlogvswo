@@ -1,0 +1,527 @@
+success: classic: 21 / 100
+		 log: 27 / 100
+
+exec time: $ python LDPC-main_anne.py > res_classic  896.21s user 0.45s system 99% cpu 14:58.28 total
+		   $ python LDPC-main_anne_log.py > res_withlog  740.28s user 0.48s system 99% cpu 12:22.39 total
+
+other error log: 
+$ /media/askm/Data/home2/gitprojects/VietProj/LDPCPy/LDPC_anne_test.py:321: RuntimeWarning: divide by zero encountered in double_scalars
+  lookup[x].r_0 = np.log((1+(-1)**syndrome[x[0]]*res)/(1-(-1)**syndrome[x[0]]*res))
+/media/askm/Data/home2/gitprojects/VietProj/LDPCPy/LDPC_anne_test.py:321: RuntimeWarning: divide by zero encountered in log
+  lookup[x].r_0 = np.log((1+(-1)**syndrome[x[0]]*res)/(1-(-1)**syndrome[x[0]]*res))
+/media/askm/Data/home2/gitprojects/VietProj/LDPCPy/LDPC_anne_test.py:307: RuntimeWarning: invalid value encountered in double_scalars
+  return (t-1)/(t+1)
+/media/askm/Data/home2/gitprojects/VietProj/LDPCPy/LDPC_anne_test.py:321: RuntimeWarning: divide by zero encountered in double_scalars
+  lookup[x].r_0 = np.log((1+(-1)**syndrome[x[0]]*res)/(1-(-1)**syndrome[x[0]]*res))
+/media/askm/Data/home2/gitprojects/VietProj/LDPCPy/LDPC_anne_test.py:321: RuntimeWarning: divide by zero encountered in log
+  lookup[x].r_0 = np.log((1+(-1)**syndrome[x[0]]*res)/(1-(-1)**syndrome[x[0]]*res))
+
+
+classic : 
+
+n=1000 wc=4 wr=10 p=0.06
+time for gen H: 1 ms
+time to compress H: 3 ms
+time to compute Hc: 0 ms
+time to create lookup 4: 238 ms
+bpiter max: 60
+ok
+rounds: 12
+time to not decode: 9760 ms
+Fail to decode
+rounds: 59
+time to not decode: 9856 ms
+Fail to decode
+rounds: 59
+time to not decode: 10788 ms
+Fail to decode
+rounds: 59
+time to not decode: 10752 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 23
+time to not decode: 10792 ms
+Fail to decode
+rounds: 59
+time to not decode: 10835 ms
+Fail to decode
+rounds: 59
+time to not decode: 10905 ms
+Fail to decode
+rounds: 59
+time to not decode: 10766 ms
+Fail to decode
+rounds: 59
+time to not decode: 10819 ms
+Fail to decode
+rounds: 59
+time to not decode: 10795 ms
+Fail to decode
+rounds: 59
+time to not decode: 10819 ms
+Fail to decode
+rounds: 59
+time to not decode: 10778 ms
+Fail to decode
+rounds: 59
+time to not decode: 10833 ms
+Fail to decode
+rounds: 59
+time to not decode: 10900 ms
+Fail to decode
+rounds: 59
+time to not decode: 10943 ms
+Fail to decode
+rounds: 59
+time to not decode: 10898 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 13
+time to not decode: 10803 ms
+Fail to decode
+rounds: 59
+time to not decode: 11065 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 22
+time to not decode: 11114 ms
+Fail to decode
+rounds: 59
+time to not decode: 10728 ms
+Fail to decode
+rounds: 59
+time to not decode: 10795 ms
+Fail to decode
+rounds: 59
+time to not decode: 10995 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 12
+time to not decode: 10856 ms
+Fail to decode
+rounds: 59
+time to not decode: 10775 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 5
+time to not decode: 10886 ms
+Fail to decode
+rounds: 59
+time to not decode: 10814 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 6
+time to not decode: 10800 ms
+Fail to decode
+rounds: 59
+time to not decode: 10850 ms
+Fail to decode
+rounds: 59
+time to not decode: 11003 ms
+Fail to decode
+rounds: 59
+time to not decode: 11160 ms
+Fail to decode
+rounds: 59
+time to not decode: 11227 ms
+Fail to decode
+rounds: 59
+time to not decode: 10751 ms
+Fail to decode
+rounds: 59
+time to not decode: 11140 ms
+Fail to decode
+rounds: 59
+time to not decode: 11115 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 7
+time to not decode: 11261 ms
+Fail to decode
+rounds: 59
+time to not decode: 11126 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 12
+time to not decode: 11070 ms
+Fail to decode
+rounds: 59
+time to not decode: 11101 ms
+Fail to decode
+rounds: 59
+time to not decode: 10957 ms
+Fail to decode
+rounds: 59
+time to not decode: 11258 ms
+Fail to decode
+rounds: 59
+time to not decode: 11057 ms
+Fail to decode
+rounds: 59
+time to not decode: 10954 ms
+Fail to decode
+rounds: 59
+time to not decode: 10958 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 17
+time to not decode: 11036 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 48
+time to not decode: 10897 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 9
+time to not decode: 10880 ms
+Fail to decode
+rounds: 59
+time to not decode: 10872 ms
+Fail to decode
+rounds: 59
+time to not decode: 10832 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 13
+time to not decode: 10902 ms
+Fail to decode
+rounds: 59
+time to not decode: 10866 ms
+Fail to decode
+rounds: 59
+time to not decode: 10988 ms
+Fail to decode
+rounds: 59
+time to not decode: 10992 ms
+Fail to decode
+rounds: 59
+time to not decode: 10971 ms
+Fail to decode
+rounds: 59
+time to not decode: 10983 ms
+Fail to decode
+rounds: 59
+time to not decode: 10960 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 10
+time to not decode: 10915 ms
+Fail to decode
+rounds: 59
+time to not decode: 10868 ms
+Fail to decode
+rounds: 59
+time to not decode: 10954 ms
+Fail to decode
+rounds: 59
+time to not decode: 11070 ms
+Fail to decode
+rounds: 59
+time to not decode: 11040 ms
+Fail to decode
+rounds: 59
+time to not decode: 10898 ms
+Fail to decode
+rounds: 59
+time to not decode: 10896 ms
+Fail to decode
+rounds: 59
+time to not decode: 10937 ms
+Fail to decode
+rounds: 59
+time to not decode: 10800 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 6
+time to not decode: 10064 ms
+Fail to decode
+rounds: 59
+time to not decode: 10101 ms
+Fail to decode
+rounds: 59
+time to not decode: 9557 ms
+Fail to decode
+rounds: 59
+time to not decode: 9350 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 32
+time to not decode: 9370 ms
+Fail to decode
+rounds: 59
+time to not decode: 9038 ms
+Fail to decode
+rounds: 59
+time to not decode: 9360 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 26
+ok
+rounds: 9
+ok
+rounds: 8
+ok
+rounds: 27
+time to not decode: 9469 ms
+Fail to decode
+rounds: 59
+ok
+rounds: 6
+time to not decode: 9511 ms
+Fail to decode
+rounds: 59
+time to not decode: 9310 ms
+Fail to decode
+rounds: 59
+time to not decode: 8982 ms
+Fail to decode
+rounds: 59
+time to not decode: 8989 ms
+Fail to decode
+rounds: 59
+time to not decode: 8970 ms
+Fail to decode
+rounds: 59
+time to not decode: 9042 ms
+Fail to decode
+rounds: 59
+time to not decode: 9213 ms
+Fail to decode
+rounds: 59
+mean rounds: 15.38 min: 5 max: 48
+mean time: 2.852 sec (0.185 sec / round)
+success: 21 / 100
+false_pos: 0 / 100
+
+*************************************
+
+with log:
+ 
+ 
+n=1000 wc=4 wr=10 p=0.06
+time for gen H: 2 ms
+time to compress H: 2 ms
+time to compute Hc: 1 ms
+time to create lookup 4: 254 ms
+bpiter max: 60
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 15
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 7
+ok
+rounds: 6
+ok
+rounds: 36
+Fail to decode
+rounds: 59
+ok
+rounds: 7
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 49
+ok
+rounds: 13
+ok
+rounds: 19
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 11
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 8
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 18
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 8
+ok
+rounds: 13
+Fail to decode
+rounds: 59
+ok
+rounds: 8
+ok
+rounds: 17
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 24
+Fail to decode
+rounds: 59
+ok
+rounds: 6
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 18
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 12
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 19
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 11
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 8
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 17
+ok
+rounds: 47
+ok
+rounds: 23
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 11
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+ok
+rounds: 9
+Fail to decode
+rounds: 59
+Fail to decode
+rounds: 59
+mean rounds: 16.3 min: 6 max: 49
+mean time: 2.651 sec (0.163 sec / round)
+success: 27 / 100
+false_pos: 0 / 100
+ 
