@@ -8,7 +8,7 @@ def secret_keyrate(error, correction_rate):
     return 1 - entropy(error) - correction_rate
 
 def draw_graph():
-    p_set = [0.02,0.05,0.1]
+    p_set = [0.02,0.05,0.07]
     i = 0
     for p in p_set:
         end_point = 1 - entropy(p)

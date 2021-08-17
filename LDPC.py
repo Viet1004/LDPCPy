@@ -12,8 +12,10 @@ Original file is located at
 import numpy as np
 import unittest
 import random
+from numpy.ma.core import shape
 from scipy.sparse import csr_matrix, data, coo_matrix
 from scipy.sparse import vstack
+from numba import jit
 import math
 
 class Data:
@@ -35,6 +37,7 @@ class Data_MinSum:
     self.L = L
     self.Z = Z
 
+#@jit(nopython = True)
 def BFS_simple(graph, node, m,n):
   """
   This one only works for our purpose!!! It's not a BFS algo in general
@@ -65,24 +68,16 @@ def BFS_simple(graph, node, m,n):
 #    print("===========This is between checknode and variablenode==============")
     for checkNode in queueCheck:
       temp2 = list(set(temp2) | set(graph[checkNode]))
-#      print(graph[checkNode])
-#      print(temp2)
     temp2 = list(set(temp2) | set(variablePassed))
     queueVariable = list(set(temp2) - set(variablePassed))
-#    print("=====")
-#    print(variablePassed)
-
     variablePassed = temp2
-#    print("Variable node Queue")
-#    print(queueVariable)
-#    print(variablePassed)
-
+#@jit
 def matrix_generation_PEG(degreeOfVNode, m, n):
   checkNode = np.zeros(m)
   graph = []
   for i in range(n+m):
     graph.append([])
-  data = np.ones(sum(degreeOfVNode), dtype=np.int8)
+  data = np.ones(np.sum(degreeOfVNode), dtype=np.int8)
   row = np.array([], dtype=int)
   col = np.array([], dtype=int)
   for i in range(n):
@@ -115,6 +110,7 @@ def matrix_generation_PEG(degreeOfVNode, m, n):
 #      print(checkNode)
   return coo_matrix((data, (row, col)), dtype=np.int8).tocsr()
 
+#@jit(nopython = True)
 def matrix_generation(n: int,w_c :int, w_r: int, seed):
   """
     w_c: weight of column (number of one in a column)
@@ -123,32 +119,130 @@ def matrix_generation(n: int,w_c :int, w_r: int, seed):
     seed: to make permutation
     note: w_c < w_r
   """
-  
-#  while(n % w_r != 0):
-#    print("Please make sure that w_r divides n!")
-#  m = n*w_c/w_r
-#  matrix = np.zeros((n//w_r, n), dtype=int)
-#  matrix_clone = np.copy(matrix)
-#  for i in range(n//w_r):
-#    matrix[i][i*w_r:(i+1)*w_r] = 1
-#  matrix_clone = np.copy(matrix)
-#  for i in range(w_c-1):
-#    b = np.random.RandomState(seed = seed*i).permutation(n)
-#    temp = np.zeros((n//w_r, n), dtype=int)
-#    for j in range(n):
-#      temp[:,j] = matrix_clone[:,b[j]]
-#    matrix = np.concatenate((matrix, temp), axis = 0)
-#  return matrix
   data = np.ones(n)
   indptr = np.arange(0,n+1,w_r)
   indices = np.arange(n)
-  matrix = csr_matrix((data,indices,indptr), dtype=np.int8)
+  matrix = csr_matrix((data,indices,indptr), dtype=float)
   for i in range(w_c -1):
     temp = np.copy(indices)
     np.random.RandomState(seed = seed*i).shuffle(temp)
-    matrix = vstack([matrix,csr_matrix((data, temp, indptr), dtype=np.int8)])
+    matrix = vstack([matrix,csr_matrix((data, temp, indptr), dtype=float)])
   return matrix
 
+
+# =============== Create irregular matrix with rate = 0.75 ========================
+#rate = 0.75
+def matrix_generation_test(m,n):
+  lookup_table = {31:0.47408,28:0.01107,7:0.05288,6:0.10667, 5:0.13764, 4:0.01449, 3: 0.18088, 2:0.10805 }
+
+  denominator = lambda a: sum([a[i]/i for i in a])
+  denom = denominator(lookup_table)
+  Dv = np.zeros(n,dtype = np.int16)
+  placetaken = 0
+  for x in lookup_table:
+    if x == 2:
+      Dv[placetaken:n] = x
+    else:
+      number = round(n*lookup_table[x]/(x*denom))
+      if number == 0:
+        number = 1
+      Dv[placetaken:placetaken+number] = x
+      placetaken += number
+  return Dv
+
+
+# =============== End of matrix generation ========================================
+
+
+# =============== This change might improve speed of the code =====================
+def matrix_generation_regularLDPC(n: int,w_c :int, w_r: int,seed):
+  indptr = np.arange(0,n+1,w_r)
+  indices = np.arange(n)
+  data = np.ones(n*w_c, dtype=float)
+  matrix = csr_matrix((data,indices,indptr), dtype=float)
+  for i in range(w_c -1):
+    temp = np.copy(indices)
+    np.random.RandomState(seed = seed*i).shuffle(temp)
+    matrix = vstack([matrix,csr_matrix((data, temp, indptr), dtype=float)])
+  return matrix
+
+
+
+#@jit(nopython = True)
+def input_generation_regularLDPC(matrix, postProba):
+  """
+    w_c: weight of column (number of one in a column)
+    w_r: weight of row (number of one in a row)
+    n: size of code
+    seed: to make permutation
+    note: w_c < w_r
+  """
+  matrix.data = np.array([np.log(postProba[x]/(1-postProba[x])) for x in matrix.indices])
+
+def new_horizontal_run(matrix, syndrome):
+  indptr = matrix.indptr
+#  indices = matrix.indices
+  data = np.tanh(matrix.data/2)
+#  dumpInd = 0
+  for index in range(len(indptr)):
+    start = indptr[index]
+    end = indptr[index+1]
+    if start == end:
+      continue
+    temp1 = np.copy(data[start:end])
+    prodTemp = temp1.prod()
+    if np.isnan(prodTemp):
+#      print("We are fucked again!")
+      prodTemp = 0
+      continue
+    for i in range(end - start):
+      temp2 = prodTemp/temp1[i]*(-1)**syndrome[index]
+#      print(type(temp2))
+      matrix.data[start+i] = np.log((1+temp2)/(1-temp2))
+    if end == indptr[-1]:
+      break
+#  print(matrix.toarray())
+  return matrix
+#@jit(nopython = True)
+def new_vertical_run(matrix, postProba,n):
+  matrix = matrix.tocsc()
+  indptr = matrix.indptr
+#  indices = matrix.indices
+  data = matrix.data
+
+#  print(postProba)
+  beta = np.zeros(n)
+  for index in range(len(indptr)):
+    start = indptr[index]
+    end = indptr[index +1]    
+    temp1 = np.copy(data[start:end])
+    beta[index] = temp1.sum() + postProba[index]
+    for i in range(end- start):
+      matrix.data[start+i] = beta[index] - temp1[i]
+    if end == len(data):
+      break
+  string=np.array(beta<=0)
+  string=string.astype(int)
+#  print(matrix.toarray())
+  return (matrix.tocsr(), string)
+#@jit
+def new_MessagePassing(matrix,postProba,syndrome, n, numberIter = 60):
+  matrix0 = csr_matrix((np.ones(len(matrix.data), dtype=np.int8),matrix.indices,matrix.indptr), dtype = np.int8)
+  postProba = data = np.array([np.log(x/(1-x)) for x in postProba])
+  for i in range(numberIter):
+    matrix = new_horizontal_run(matrix, syndrome)
+#    print("===================================")
+#    print(matrix.toarray())
+#    print("===================================")
+    matrix,string = new_vertical_run(matrix,postProba,n)
+#    print(matrix.toarray())
+    verifi = verification(matrix0,string,syndrome)
+    if verifi == True:
+#      print(f"The number of Iteration is {i}")
+      return True,string
+  return False, None
+# =============== End of change ===================================================
+#@jit
 def BSC_channel(code, crossoverProba: float):
   n = code.shape[0]
   res = np.copy(code)
@@ -163,24 +257,6 @@ def BSC_channel(code, crossoverProba: float):
   return res, postProba
 
 def create_lookup(matrix):
-#  m,n = np.shape(matrix)
-#  lookup = {}
-##  string = np.zeros(shape= n , dtype=float)
-#  for i in range(m):
-#    for j in range(n):
-#      if matrix[i][j] == 1:
-#        neighborR = []
-#        neighborC = []
-#        for k in range(n):
-#          if matrix[i][k] == 1 and j != k:    
-#            neighborR.append((i,k))
-#        for k in range(m):
-#          if matrix[k][j] == 1 and i != k:
-#            neighborC.append((k,j))
-#        data = Data(neighborC = neighborC, neighborR= neighborR)
-#        lookup[(i,j)] = data
-#  return lookup
-
   m,n = matrix.get_shape()
   lookup = {}
   # we first remap the row of H to the neighborR of the lookup 
@@ -250,12 +326,25 @@ def count_cycle_size_four(lookup: dict):
 # Log likelihood implementation
 
 def horizontal_run_log(lookup, syndrome):
+#  print("Before horizontal operation:")
+  row = [x[0] for x in lookup]
+  
+  col = [x[1] for x in lookup]
+  
+  data = [lookup[x].q_0 for x in lookup]
+  matrix = coo_matrix((data, (row,col)))
   for x in lookup:
     res = 1
     for row_neighbor in lookup[x].neighborR:
       res *= math.tanh(lookup[row_neighbor].q_0/2)
 #    print(f"Res is :{res}")
     lookup[x].r_0 = ((-1)**syndrome[x[0]])*2*math.atanh(res)
+#  print(lookup)
+
+  data = [lookup[x].r_0 for x in lookup]
+  
+  matrix = coo_matrix((data, (row,col)))
+#  print(matrix.toarray())
   return lookup
 
 def horizontal_run_log_MinSum(lookup, syndrome):
@@ -269,6 +358,7 @@ def horizontal_run_log_MinSum(lookup, syndrome):
       res *= np.sign(lookup[row_neighbor].q_0)
 #    print(f"Res is :{res}")
     lookup[x].r_0 = minZ*(-1)**syndrome[x[0]]
+  print(lookup)
   return lookup
 
 
@@ -301,6 +391,16 @@ def vertical_run_log(lookup, Post_proba, string):
         string[x[1]] = 0
       else:
         string[x[1]] = 1
+  row = [x[0] for x in lookup]
+  
+  col = [x[1] for x in lookup]
+  
+  data = [lookup[x].q_0 for x in lookup]
+  
+  matrix = coo_matrix((data, (row,col)))
+#  print(matrix.toarray())
+  
+#  print(lookup)
   return (lookup, string)
 
 def vertical_run(lookup, post_proba, string):
@@ -327,13 +427,6 @@ def vertical_run(lookup, post_proba, string):
         string[x[1]] = 1
       else:
         string[x[1]] = 0
-#    posterioproba[x[1]] = round(q_0/(q_0+q_1),2)
-#  print(lookup)
-#  print(posterioproba)
-#  print("=======================Posterior Probability===============================")
-#  dictionary_item = posterioproba.items()
-#  sorted_item = sorted(dictionary_item)
-#  print(sorted_item)        # in the screen, we see a tuple of (dict, value), if the value is > 0.5, c_n = 1, otherwise c_n = 0
   return (lookup, string)
 
 def verification(matrix, check, syndrome):
@@ -344,17 +437,12 @@ def verification(matrix, check, syndrome):
   """ 
   return not np.any((matrix.dot(check)-syndrome)%2)
 
-def MessagePassing_log(lookup,matrix, proba, syndrome, number_Iter = 120):
+def MessagePassing_log(lookup,matrix, proba, syndrome, number_Iter = 60):
   """
     Algorithm of message passing or belief propagation
   """
 #  lookup = create_input(matrix, proba)
-  _,n = np.shape(matrix)
-  
-#  if check_cycle(lookup) == False:
-#    print("There is a cycle is size 4 in the matrix")
-#    return (False, None)
-  
+  _,n = np.shape(matrix)  
   string = np.zeros(shape = n, dtype = np.int8)
   for i in range(number_Iter):
 #    print("round: {}".format(i))
@@ -371,21 +459,14 @@ def MessagePassing_log(lookup,matrix, proba, syndrome, number_Iter = 120):
   #print("Failure")
   return (False, None)
 
-def MessagePassing(lookup,matrix, proba, syndrome, number_Iter = 60):
+def MessagePassing(lookup,matrix, proba, syndrome, number_Iter = 1):
   """
     Algorithm of message passing or belief propagation
   """
 #  lookup = create_input(matrix, proba)
-  _,n = np.shape(matrix)
-  
-#  if check_cycle(lookup) == False:
-#    print("There is a cycle is size 4 in the matrix")
-#    return (False, None)
-  
+  _,n = np.shape(matrix)  
   string = np.zeros(shape = n, dtype = np.int8)
   for i in range(number_Iter):
-#    print("round: {}".format(i))
-#    print("=======================Horizontal Round===========================")
     lookup = horizontal_run(lookup, syndrome)
 #    print("=======================Vertical Round===========================")
     (lookup, string) = vertical_run(lookup, proba,string)

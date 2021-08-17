@@ -1,0 +1,508 @@
+n:504 w_c: 3, w_r: 6, p: 0.05
+Preparation time is : 0.13996195793151855
+The number of Iteration is : 3
+The number of Iteration is : 7
+The number of Iteration is : 6
+The number of Iteration is : 7
+The number of Iteration is : 6
+The number of Iteration is : 4
+The number of Iteration is : 7
+The number of Iteration is : 6
+The number of Iteration is : 5
+The number of Iteration is : 3
+The number of Iteration is : 3
+The number of Iteration is : 2
+The number of Iteration is : 6
+The number of Iteration is : 3
+The number of Iteration is : 6
+The number of Iteration is : 2
+The number of Iteration is : 4
+The number of Iteration is : 4
+The number of Iteration is : 4
+The number of Iteration is : 3
+Execution time in avarage is : 0.09770222902297973
+======================================================================
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.10472781658172607 seconds to complete
+n:504 w_c: 3, w_r: 6, p: 0.07
+Preparation time is : 0.13277697563171387
+The number of Iteration is : 5
+The number of Iteration is : 6
+The number of Iteration is : 25
+The number of Iteration is : 6
+The number of Iteration is : 7
+The number of Iteration is : 10
+The number of Iteration is : 6
+The number of Iteration is : 9
+The number of Iteration is : 12
+The number of Iteration is : 8
+The number of Iteration is : 8
+The number of Iteration is : 27
+The number of Iteration is : 2
+The number of Iteration is : 14
+The number of Iteration is : 13
+The number of Iteration is : 10
+Execution time in avarage is : 0.36545716524124144
+======================================================================
+======================================================================
+There are 16 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.37212635278701783 seconds to complete
+n:504 w_c: 3, w_r: 6, p: 0.08
+Preparation time is : 0.15179157257080078
+The number of Iteration is : 5
+The number of Iteration is : 9
+The number of Iteration is : 9
+The number of Iteration is : 9
+The number of Iteration is : 9
+The number of Iteration is : 38
+The number of Iteration is : 6
+The number of Iteration is : 25
+The number of Iteration is : 7
+The number of Iteration is : 5
+The number of Iteration is : 8
+The number of Iteration is : 3
+The number of Iteration is : 12
+Execution time in avarage is : 0.5517190098762512
+======================================================================
+======================================================================
+There are 13 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.5593448877334595 seconds to complete
+n:504 w_c: 3, w_r: 7, p: 0.05
+Preparation time is : 0.12839078903198242
+The number of Iteration is : 2
+The number of Iteration is : 4
+The number of Iteration is : 6
+The number of Iteration is : 3
+The number of Iteration is : 3
+The number of Iteration is : 6
+The number of Iteration is : 7
+The number of Iteration is : 14
+The number of Iteration is : 6
+The number of Iteration is : 5
+The number of Iteration is : 5
+The number of Iteration is : 5
+The number of Iteration is : 9
+The number of Iteration is : 12
+The number of Iteration is : 11
+The number of Iteration is : 7
+The number of Iteration is : 14
+The number of Iteration is : 29
+The number of Iteration is : 4
+Execution time in avarage is : 0.20984622240066528
+======================================================================
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.21629819869995118 seconds to complete
+n:504 w_c: 3, w_r: 7, p: 0.07
+Preparation time is : 0.1299576759338379
+The number of Iteration is : 9
+The number of Iteration is : 21
+The number of Iteration is : 36
+The number of Iteration is : 11
+The number of Iteration is : 4
+The number of Iteration is : 6
+The number of Iteration is : 8
+Execution time in avarage is : 0.778655207157135
+======================================================================
+======================================================================
+There are 7 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.7851862192153931 seconds to complete
+n:504 w_c: 3, w_r: 7, p: 0.08
+Preparation time is : 0.12938952445983887
+The number of Iteration is : 23
+Execution time in avarage is : 1.020499575138092
+======================================================================
+======================================================================
+There are 1 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.0270016670227051 seconds to complete
+n:504 w_c: 4, w_r: 9, p: 0.05
+Preparation time is : 0.1472184658050537
+The number of Iteration is : 40
+The number of Iteration is : 6
+The number of Iteration is : 4
+The number of Iteration is : 12
+The number of Iteration is : 5
+The number of Iteration is : 6
+The number of Iteration is : 14
+The number of Iteration is : 19
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 10
+The number of Iteration is : 5
+The number of Iteration is : 6
+The number of Iteration is : 5
+The number of Iteration is : 9
+The number of Iteration is : 13
+The number of Iteration is : 4
+The number of Iteration is : 8
+Execution time in avarage is : 0.4685678243637085
+======================================================================
+======================================================================
+There are 18 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.475994610786438 seconds to complete
+n:504 w_c: 4, w_r: 9, p: 0.07
+Preparation time is : 0.15867161750793457
+The number of Iteration is : 15
+The number of Iteration is : 7
+The number of Iteration is : 16
+The number of Iteration is : 7
+Execution time in avarage is : 1.4967543721199035
+======================================================================
+======================================================================
+There are 4 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.50475914478302 seconds to complete
+n:504 w_c: 4, w_r: 9, p: 0.08
+Preparation time is : 0.14291834831237793
+The number of Iteration is : 11
+The number of Iteration is : 5
+Execution time in avarage is : 1.6311519026756287
+======================================================================
+======================================================================
+There are 2 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.6383673071861267 seconds to complete
+n:2016 w_c: 3, w_r: 6, p: 0.05
+Preparation time is : 0.5861475467681885
+The number of Iteration is : 4
+The number of Iteration is : 4
+The number of Iteration is : 5
+The number of Iteration is : 5
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 5
+The number of Iteration is : 6
+The number of Iteration is : 5
+The number of Iteration is : 7
+The number of Iteration is : 6
+The number of Iteration is : 7
+The number of Iteration is : 4
+The number of Iteration is : 4
+The number of Iteration is : 3
+The number of Iteration is : 4
+The number of Iteration is : 3
+The number of Iteration is : 6
+The number of Iteration is : 8
+The number of Iteration is : 5
+Execution time in avarage is : 0.42155559062957765
+======================================================================
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 0.45107007026672363 seconds to complete
+n:2016 w_c: 3, w_r: 6, p: 0.07
+Preparation time is : 0.5893778800964355
+The number of Iteration is : 9
+The number of Iteration is : 17
+The number of Iteration is : 13
+The number of Iteration is : 11
+The number of Iteration is : 20
+The number of Iteration is : 8
+The number of Iteration is : 6
+The number of Iteration is : 16
+The number of Iteration is : 10
+The number of Iteration is : 8
+The number of Iteration is : 7
+The number of Iteration is : 10
+The number of Iteration is : 12
+The number of Iteration is : 18
+The number of Iteration is : 18
+The number of Iteration is : 14
+The number of Iteration is : 32
+The number of Iteration is : 7
+The number of Iteration is : 11
+Execution time in avarage is : 1.1736791133880615
+======================================================================
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.2033702969551086 seconds to complete
+n:2016 w_c: 3, w_r: 6, p: 0.08
+Preparation time is : 0.5700228214263916
+The number of Iteration is : 23
+The number of Iteration is : 21
+The number of Iteration is : 33
+The number of Iteration is : 22
+The number of Iteration is : 23
+The number of Iteration is : 11
+The number of Iteration is : 46
+The number of Iteration is : 20
+The number of Iteration is : 11
+The number of Iteration is : 21
+The number of Iteration is : 38
+The number of Iteration is : 19
+The number of Iteration is : 24
+Execution time in avarage is : 2.569439148902893
+======================================================================
+======================================================================
+There are 13 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 2.5981770038604735 seconds to complete
+n:2016 w_c: 3, w_r: 7, p: 0.05
+Preparation time is : 0.5613119602203369
+The number of Iteration is : 7
+The number of Iteration is : 17
+The number of Iteration is : 8
+The number of Iteration is : 29
+The number of Iteration is : 15
+The number of Iteration is : 5
+The number of Iteration is : 4
+The number of Iteration is : 42
+The number of Iteration is : 10
+The number of Iteration is : 6
+The number of Iteration is : 9
+The number of Iteration is : 15
+The number of Iteration is : 10
+The number of Iteration is : 8
+The number of Iteration is : 6
+The number of Iteration is : 15
+The number of Iteration is : 5
+The number of Iteration is : 6
+The number of Iteration is : 6
+Execution time in avarage is : 1.0905064582824706
+======================================================================
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.118810760974884 seconds to complete
+n:2016 w_c: 3, w_r: 7, p: 0.07
+Preparation time is : 0.557807445526123
+Execution time in avarage is : 4.3357646584510805
+======================================================================
+======================================================================
+There are 0 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 4.363894987106323 seconds to complete
+n:2016 w_c: 3, w_r: 7, p: 0.08
+Preparation time is : 0.5568816661834717
+Execution time in avarage is : 4.34488400220871
+======================================================================
+======================================================================
+There are 0 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 4.372977983951569 seconds to complete
+n:2016 w_c: 4, w_r: 9, p: 0.05
+Preparation time is : 0.6684925556182861
+The number of Iteration is : 6
+The number of Iteration is : 10
+The number of Iteration is : 4
+The number of Iteration is : 7
+The number of Iteration is : 6
+The number of Iteration is : 8
+The number of Iteration is : 10
+The number of Iteration is : 5
+The number of Iteration is : 4
+The number of Iteration is : 3
+The number of Iteration is : 7
+The number of Iteration is : 6
+The number of Iteration is : 8
+The number of Iteration is : 9
+The number of Iteration is : 8
+The number of Iteration is : 11
+The number of Iteration is : 5
+The number of Iteration is : 6
+The number of Iteration is : 7
+Execution time in avarage is : 1.26484055519104
+======================================================================
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 1.2986811518669128 seconds to complete
+n:2016 w_c: 4, w_r: 9, p: 0.07
+Preparation time is : 0.6610140800476074
+The number of Iteration is : 19
+The number of Iteration is : 44
+The number of Iteration is : 14
+Execution time in avarage is : 6.725184082984924
+======================================================================
+======================================================================
+There are 3 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 6.758661937713623 seconds to complete
+n:2016 w_c: 4, w_r: 9, p: 0.08
+Preparation time is : 0.6474475860595703
+Execution time in avarage is : 7.27010155916214
+======================================================================
+======================================================================
+There are 0 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 7.302901673316955 seconds to complete
+n:20160 w_c: 3, w_r: 6, p: 0.05
+Preparation time is : 13.006748676300049
+The number of Iteration is : 7
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 7
+The number of Iteration is : 7
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 7
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 6
+Execution time in avarage is : 5.24192031621933
+======================================================================
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 5.895198714733124 seconds to complete
+n:20160 w_c: 3, w_r: 6, p: 0.07
+Preparation time is : 12.868737697601318
+The number of Iteration is : 13
+The number of Iteration is : 11
+The number of Iteration is : 12
+The number of Iteration is : 13
+The number of Iteration is : 12
+The number of Iteration is : 17
+The number of Iteration is : 12
+The number of Iteration is : 11
+The number of Iteration is : 14
+The number of Iteration is : 12
+The number of Iteration is : 13
+The number of Iteration is : 12
+The number of Iteration is : 13
+The number of Iteration is : 13
+The number of Iteration is : 13
+The number of Iteration is : 14
+The number of Iteration is : 16
+The number of Iteration is : 13
+The number of Iteration is : 12
+The number of Iteration is : 14
+Execution time in avarage is : 10.274240326881408
+======================================================================
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 10.920549821853637 seconds to complete
+n:20160 w_c: 3, w_r: 6, p: 0.08
+Preparation time is : 12.923559427261353
+The number of Iteration is : 29
+The number of Iteration is : 25
+The number of Iteration is : 31
+The number of Iteration is : 35
+The number of Iteration is : 35
+The number of Iteration is : 28
+The number of Iteration is : 20
+The number of Iteration is : 23
+The number of Iteration is : 20
+The number of Iteration is : 19
+The number of Iteration is : 30
+The number of Iteration is : 30
+The number of Iteration is : 26
+The number of Iteration is : 21
+The number of Iteration is : 25
+The number of Iteration is : 38
+The number of Iteration is : 19
+The number of Iteration is : 32
+The number of Iteration is : 46
+Execution time in avarage is : 22.426709294319153
+======================================================================
+======================================================================
+There are 19 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 23.075750029087068 seconds to complete
+n:20160 w_c: 3, w_r: 7, p: 0.05
+Preparation time is : 12.80418872833252
+The number of Iteration is : 11
+The number of Iteration is : 9
+The number of Iteration is : 9
+The number of Iteration is : 7
+The number of Iteration is : 9
+The number of Iteration is : 10
+The number of Iteration is : 11
+The number of Iteration is : 8
+The number of Iteration is : 11
+The number of Iteration is : 12
+The number of Iteration is : 12
+The number of Iteration is : 9
+The number of Iteration is : 9
+The number of Iteration is : 9
+The number of Iteration is : 9
+The number of Iteration is : 10
+The number of Iteration is : 10
+The number of Iteration is : 10
+The number of Iteration is : 8
+The number of Iteration is : 9
+Execution time in avarage is : 8.10890315771103
+======================================================================
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 8.752197468280793 seconds to complete
+n:20160 w_c: 3, w_r: 7, p: 0.07
+Preparation time is : 12.888756275177002
+Execution time in avarage is : 46.60120762586594
+======================================================================
+======================================================================
+There are 0 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 47.24872589111328 seconds to complete
+n:20160 w_c: 3, w_r: 7, p: 0.08
+Preparation time is : 12.935898780822754
+Execution time in avarage is : 46.462549006938936
+======================================================================
+======================================================================
+There are 0 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 47.11236307621002 seconds to complete
+n:20160 w_c: 4, w_r: 9, p: 0.05
+Preparation time is : 16.740356922149658
+The number of Iteration is : 7
+The number of Iteration is : 8
+The number of Iteration is : 7
+The number of Iteration is : 7
+The number of Iteration is : 8
+The number of Iteration is : 6
+The number of Iteration is : 6
+The number of Iteration is : 7
+The number of Iteration is : 7
+The number of Iteration is : 8
+The number of Iteration is : 8
+The number of Iteration is : 7
+The number of Iteration is : 7
+The number of Iteration is : 7
+The number of Iteration is : 7
+The number of Iteration is : 8
+The number of Iteration is : 7
+The number of Iteration is : 6
+The number of Iteration is : 8
+The number of Iteration is : 7
+Execution time in avarage is : 10.521280646324158
+======================================================================
+======================================================================
+There are 20 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 11.363515162467957 seconds to complete
+n:20160 w_c: 4, w_r: 9, p: 0.07
+Preparation time is : 16.690969228744507
+Execution time in avarage is : 78.33006592988968
+======================================================================
+======================================================================
+There are 0 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 79.16966795921326 seconds to complete
+n:20160 w_c: 4, w_r: 9, p: 0.08
+Preparation time is : 16.5637047290802
+Execution time in avarage is : 77.4288425207138
+======================================================================
+======================================================================
+There are 0 successes out of 20 tests
+======================================================================
+The runtime in avarage for run took 78.2620592713356 seconds to complete

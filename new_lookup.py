@@ -153,7 +153,7 @@ def new_horizontal_run(matrix, syndrome, w_c, w_r, m, n):
       #print(Ptot)
     Ptot=np.reshape(Ptot,(nbo,))
     matrix.data=Ptot
-
+#    print(matrix.toarray())
     #return newmatrix
 
 
@@ -187,7 +187,7 @@ def new_vertical_run(matrix, postproba, w_c, w_r, m, n):
     beta=postproba+beta
     string=np.array(beta<=0)
     string=string.astype(int)
-
+#    print(matrix.tocsr().toarray())
     return (matrix,string)
 
 
@@ -243,8 +243,8 @@ def MessagePassing(matrix0, matrix, postproba, syndrome, w_c, w_r, itermp):
 def runatest():
   time00=current_milli_time()
   n =  1000000
-  w_c = 3
-  w_r = 6
+  w_c = 4
+  w_r = 8
   p=0.05
   #seed = int(sys.argv[1])
   seed = 10
