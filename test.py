@@ -1,5 +1,7 @@
 from operator import pos
 import timeit
+
+from scipy.sparse.csr import csr_matrix
 import LDPC
 import numpy as np
 import time
@@ -25,7 +27,7 @@ def timerfunc(func):
 
 #@profile
 #@timerfunc
-def run(n,w_c,w_r, probability,numberOfTest = 5):
+def run(n,w_c,w_r, probability,numberOfTest = 1):
     n = int(n//w_r * w_r)
     print(f"n:{n} w_c: {w_c}, w_r: {w_r}, p: {probability}")
     startPreparation = time.time()
@@ -49,6 +51,9 @@ def run(n,w_c,w_r, probability,numberOfTest = 5):
 #    lookup = LDPC.create_lookup(matrix)
 ##    matrix = csc_matrix(matrix)
 ##    syndrome_PEG = matrix_PEG.dot(code)
+#============ Use for testing
+
+#============ End of testing
     syndrome = matrix.dot(code) % 2 
 #    endPreparation = time.time()
 #
@@ -76,7 +81,9 @@ def run(n,w_c,w_r, probability,numberOfTest = 5):
 #            print("this is log scheme")
 #            success_log += 1    
 #This is the test space =============================================
-        
+    #================
+#        postProba = np.array([0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.2,0.8,0.8])
+    #================
         start = time.time()
         LDPC.input_generation_regularLDPC(matrix,postProba)
         end = time.time()
@@ -141,25 +148,25 @@ def test():
 #                run(n,set[0],set[1],p)
 
 if __name__ == "__main__":
-    test()
-#    start = time.time()
-#    m = 100
-#    n = 400
-#    Dv = LDPC.matrix_generation_test(m,n)
-##    print(Dv)
-##    print(sum(Dv))
-#    matrix = LDPC.matrix_generation_PEG(Dv, m,n)
-#    end = time.time()
-#    print(f"{end - start }")
-#    code = np.random.choice([0,1],size = n)
-#    received, postProba = LDPC.BSC_channel(code, 0.03)
-#    syndrom = matrix.dot(received) %2
-#    for i in range(5):
-#        verifi, codeWord = LDPC.new_MessagePassing(matrix, postProba,syndrom,n)
-#        if verifi:
-#            print("Successful decoding!")
-#        else:
-#            print("Failed!!!")
+#    test()
+    start = time.time()
+    m = 100
+    n = 400
+    Dv = LDPC.matrix_generation_test(m,n)
+#    print(Dv)
+#    print(sum(Dv))
+    matrix = LDPC.matrix_generation_PEG(Dv, m,n)
+    end = time.time()
+    print(f"{end - start }")
+    code = np.random.choice([0,1],size = n)
+    received, postProba = LDPC.BSC_channel(code, 0.03)
+    syndrom = matrix.dot(received) %2
+    for i in range(5):
+        verifi, codeWord = LDPC.new_MessagePassing(matrix, postProba,syndrom,n)
+        if verifi:
+            print("Successful decoding!")
+        else:
+            print("Failed!!!")
 
 #    probability = 0.4
 #    n = 8

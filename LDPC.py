@@ -166,8 +166,6 @@ def matrix_generation_regularLDPC(n: int,w_c :int, w_r: int,seed):
     matrix = vstack([matrix,csr_matrix((data, temp, indptr), dtype=float)])
   return matrix
 
-
-
 #@jit(nopython = True)
 def input_generation_regularLDPC(matrix, postProba):
   """
@@ -201,7 +199,7 @@ def new_horizontal_run(matrix, syndrome):
       matrix.data[start+i] = np.log((1+temp2)/(1-temp2))
     if end == indptr[-1]:
       break
-#  print(matrix.toarray())
+  print(matrix.data)
   return matrix
 #@jit(nopython = True)
 def new_vertical_run(matrix, postProba,n):
@@ -223,10 +221,10 @@ def new_vertical_run(matrix, postProba,n):
       break
   string=np.array(beta<=0)
   string=string.astype(int)
-#  print(matrix.toarray())
+  print(matrix.data)
   return (matrix.tocsr(), string)
 #@jit
-def new_MessagePassing(matrix,postProba,syndrome, n, numberIter = 60):
+def new_MessagePassing(matrix,postProba,syndrome, n, numberIter = 1):
   matrix0 = csr_matrix((np.ones(len(matrix.data), dtype=np.int8),matrix.indices,matrix.indptr), dtype = np.int8)
   postProba = data = np.array([np.log(x/(1-x)) for x in postProba])
   for i in range(numberIter):
