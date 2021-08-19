@@ -15,8 +15,14 @@ import random
 from numpy.ma.core import shape
 from scipy.sparse import csr_matrix, data, coo_matrix
 from scipy.sparse import vstack
-from numba import jit
+#from numba import jit
 import math
+
+cnt_nan = 0
+cnt_zero = 0
+cnt_temp1 = 0
+match_fail = 0
+match_success = 0
 
 class Data:
   def __init__(self, neighborC, neighborR, q_0 = 1 , r_0 = 1):
@@ -178,29 +184,42 @@ def input_generation_regularLDPC(matrix, postProba):
   matrix.data = np.array([np.log(postProba[x]/(1-postProba[x])) for x in matrix.indices])
 
 def new_horizontal_run(matrix, syndrome):
+  global cnt_nan
+  global cnt_zero
   indptr = matrix.indptr
-#  indices = matrix.indices
+  # indices = matrix.indices
   data = np.tanh(matrix.data/2)
-#  dumpInd = 0
-  for index in range(len(indptr)):
+  # dumpInd = 0
+  for index in range(len(indptr)-1):
     start = indptr[index]
     end = indptr[index+1]
     if start == end:
       continue
     temp1 = np.copy(data[start:end])
+    T=np.where(temp1==0)
+    if len(T[0]) != 0:
+      print(f'temp1: {len(T[0])}')
+      cnt_temp1 += 1
+      temp1[T]=10**(-5)
     prodTemp = temp1.prod()
     if np.isnan(prodTemp):
-#      print("We are fucked again!")
+      #print("We are fucked again!")
       prodTemp = 0
+      cnt_nan += 1
       continue
     for i in range(end - start):
       temp2 = prodTemp/temp1[i]*(-1)**syndrome[index]
-#      print(type(temp2))
+      # print(type(temp2))
+      if np.abs(temp2) == 1.0:
+        temp2 = temp2-np.sign(temp2)*10**(-10)
+        cnt_zero += 1
       matrix.data[start+i] = np.log((1+temp2)/(1-temp2))
-    if end == indptr[-1]:
-      break
-  print(matrix.data)
+    # this line is never reached if continue at range - 1
+    # if end == indptr[-1]:
+    #   break
+  #print(f'matrix: {matrix.data}')
   return matrix
+
 #@jit(nopython = True)
 def new_vertical_run(matrix, postProba,n):
   matrix = matrix.tocsc()
@@ -221,24 +240,49 @@ def new_vertical_run(matrix, postProba,n):
       break
   string=np.array(beta<=0)
   string=string.astype(int)
-  print(matrix.data)
+  #print(f'matrix {matrix.data}')
   return (matrix.tocsr(), string)
+
 #@jit
-def new_MessagePassing(matrix,postProba,syndrome, n, numberIter = 1):
+def new_MessagePassing(matrix,postProba,syndrome, n, numberIter = 60):
+  global cnt_zero
+  global cnt_temp1
+  global match_fail
+  global match_success
+
+  input_generation_regularLDPC(matrix, postProba)
+  #print(f'matrix {matrix}')
   matrix0 = csr_matrix((np.ones(len(matrix.data), dtype=np.int8),matrix.indices,matrix.indptr), dtype = np.int8)
-  postProba = data = np.array([np.log(x/(1-x)) for x in postProba])
+  #print(f'matrix0 {matrix0}')
+  #postProba = data = np.array([np.log(x/(1-x)) for x in postProba])
+  postProba=np.log(postProba/(1-postProba))
+  #print(f'postProba: {postProba}')
   for i in range(numberIter):
+    #print("horizontal")
     matrix = new_horizontal_run(matrix, syndrome)
-#    print("===================================")
-#    print(matrix.toarray())
-#    print("===================================")
+    #print("===================================")
+    #print(f'matrix {matrix}')
+    # print("===================================")
+    #print("vertical")
     matrix,string = new_vertical_run(matrix,postProba,n)
-#    print(matrix.toarray())
+    # print(matrix.toarray())
     verifi = verification(matrix0,string,syndrome)
     if verifi == True:
-#      print(f"The number of Iteration is {i}")
-      return True,string
-  return False, None
+      print(f"The number of Iteration is {i+1}")
+      print(f'cnt_nan: {cnt_nan} cnt_zerot1: {cnt_temp1} cnt_zerot2: {cnt_zero}')
+      if cnt_zero != 0:
+        match_success += 1
+      cnt_zero = 0
+      cnt_temp1 = 0
+      return True, i+1, string, match_fail, match_success
+  print(f'cnt_nan: {cnt_nan} cnt_zerot1: {cnt_temp1} cnt_zerot2: {cnt_zero}')
+  if cnt_zero != 0:
+    match_fail += 1
+  cnt_zero = 0
+  cnt_temp1 = 0
+  return False, i+1, string, match_fail, match_success
+
+
 # =============== End of change ===================================================
 #@jit
 def BSC_channel(code, crossoverProba: float):
@@ -248,10 +292,14 @@ def BSC_channel(code, crossoverProba: float):
   for i in range(n):
     if random.random() < crossoverProba:
       res[i] = int((code[i]+1)%2)
-    if res[i] == 0:
-      postProba.append(1-crossoverProba)
-    else:
+    # if res[i] == 0:
+    #   postProba.append(1-crossoverProba)
+    # else:
       postProba.append(crossoverProba)
+
+  # this is much faster
+  postProba = np.array([])
+  postProba=(1-res)*(1-crossoverProba)+res*crossoverProba
   return res, postProba
 
 def create_lookup(matrix):

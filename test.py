@@ -5,8 +5,12 @@ from scipy.sparse.csr import csr_matrix
 import LDPC
 import numpy as np
 import time
-from scipy.sparse import csc_matrix 
-from numba import jit
+from scipy.sparse import csc_matrix, save_npz, load_npz 
+#from numba import jit
+
+import sys
+np.set_printoptions(threshold=sys.maxsize)
+
 def timerfunc(func):
     """
     A timer decorator
@@ -150,24 +154,80 @@ def test():
 if __name__ == "__main__":
 #    test()
     start = time.time()
-    m = 100
-    n = 400
+    #m = 100
+    n = 10000
+    m = int(0.25*n)
+    print(f'n {n} m {m}')
     Dv = LDPC.matrix_generation_test(m,n)
-#    print(Dv)
-#    print(sum(Dv))
-    matrix = LDPC.matrix_generation_PEG(Dv, m,n)
+    #print(Dv)
+    # print(sum(Dv))
+    # n =  100
+    # w_c = 3
+    # w_r = 6
+    # n = w_r*(n//w_r)
+    # m = w_c*(n//w_r)
+    p=0.02
+    seed = 10    
+    #print("n={} wc={} wr={} p={}".format(n,w_c,w_r,p))
+    
+    #Dv = np.array(n*[w_c])
+    #matrix = LDPC.matrix_generation_PEG(Dv, m,n)
+    #save_npz('sparse_irregular_075_10000.npz', matrix)
+    matrix = load_npz('sparse_irregular_075_10000.npz')
+    #matrix = LDPC.matrix_generation(n,w_c,w_r,seed)
     end = time.time()
-    print(f"{end - start }")
-    code = np.random.choice([0,1],size = n)
-    received, postProba = LDPC.BSC_channel(code, 0.03)
-    syndrom = matrix.dot(received) %2
-    for i in range(5):
-        verifi, codeWord = LDPC.new_MessagePassing(matrix, postProba,syndrom,n)
+    print(f"time to gen H {round(end - start,6)} sec")
+    codeword = np.random.choice([0,1],size = n)
+    #print(f'codeword: {codeword}')
+    syndrom = matrix.dot(codeword) %2
+    #print(f'syndrom: {syndrom}')
+
+    #print(f'rank: {np.linalg.matrix_rank(matrix.todense())}')
+
+
+    success = 0
+    false_pos = 0
+    Lrounds = []
+    Lcopm = []
+    nbTest=10
+    for i in range(nbTest):
+        received, postProba = LDPC.BSC_channel(codeword, p)
+        #print(f'received: {received} postProba: {postProba}')
+        initial_error=((received-codeword)%2).sum()
+        copm=initial_error/n
+        #print(f'true crossoverProba: {round(copm,5)}')
+        Lcopm.append(copm)
+        time0=round(time.time()*1000)
+        verifi, rounds, recv_vec, match_fail, match_success = LDPC.new_MessagePassing(matrix, postProba,syndrom,n)
         if verifi:
             print("Successful decoding!")
+            if ((codeword-recv_vec)%2).sum() == 0:
+                success += 1
+                Lrounds.append(rounds)
+            else :
+                false_pos += 1
+            time1=round(time.time()*1000)
+            print(f'time to decode {time1-time0} ms')
         else:
             print("Failed!!!")
+            time1=round(time.time()*1000)
+            print(f'time to not decode {time1-time0} ms')
+        #print(f'resulting error: {((codeword-recv_vec)%2).sum()}')
 
+    print(f'total success: {success } / {nbTest} false_pos: {false_pos}')
+    if success != 0:
+        mean_rounds = sum(Lrounds)/len(Lrounds)
+        print(f'mean rounds: {round(mean_rounds,2)} min: {min(Lrounds)} max: {max(Lrounds)}')
+        #mean_time = sum(Ltime)/len(Ltime)
+        #print(f'mean time: {round(mean_time/1000,3)} sec ({round(mean_time/mean_rounds/1000,3)} sec / round)')
+
+    mean_coproba_measured = sum(Lcopm)/len(Lcopm) 
+    Lcopm=np.array(Lcopm)
+    print(f'mean crossoverProba measured: {round(mean_coproba_measured,5)}, min: {round(min(Lcopm),5)} max: {round(max(Lcopm),5)} and {len(Lcopm[Lcopm>p])} > p')
+    print(f'match cnt_zero != 0 and failed : {match_fail} /{nbTest-success-false_pos}')
+    print(f'match cnt_zero != 0 and success : {match_success} /{success+false_pos}')
+    
+    
 #    probability = 0.4
 #    n = 8
 ##    code = np.random.choice([0,1],size = n)
