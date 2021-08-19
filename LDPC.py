@@ -17,6 +17,7 @@ from scipy.sparse import csr_matrix, data, coo_matrix
 from scipy.sparse import vstack
 #from numba import jit
 import math
+import time
 
 cnt_nan = 0
 cnt_zero = 0
@@ -257,6 +258,7 @@ def new_MessagePassing(matrix,postProba,syndrome, n, numberIter = 60):
   #postProba = data = np.array([np.log(x/(1-x)) for x in postProba])
   postProba=np.log(postProba/(1-postProba))
   #print(f'postProba: {postProba}')
+  time0=time.time()
   for i in range(numberIter):
     #print("horizontal")
     matrix = new_horizontal_run(matrix, syndrome)
@@ -274,13 +276,17 @@ def new_MessagePassing(matrix,postProba,syndrome, n, numberIter = 60):
         match_success += 1
       cnt_zero = 0
       cnt_temp1 = 0
-      return True, i+1, string, match_fail, match_success
+      time1=time.time()
+      difftime=time1-time0
+      return True, i+1, difftime, string, match_fail, match_success
   print(f'cnt_nan: {cnt_nan} cnt_zerot1: {cnt_temp1} cnt_zerot2: {cnt_zero}')
   if cnt_zero != 0:
     match_fail += 1
   cnt_zero = 0
   cnt_temp1 = 0
-  return False, i+1, string, match_fail, match_success
+  time1=time.time()
+  difftime=time1-time0
+  return False, i+1, difftime, string, match_fail, match_success
 
 
 # =============== End of change ===================================================
@@ -288,14 +294,14 @@ def new_MessagePassing(matrix,postProba,syndrome, n, numberIter = 60):
 def BSC_channel(code, crossoverProba: float):
   n = code.shape[0]
   res = np.copy(code)
-  postProba = []
+  #postProba = []
   for i in range(n):
     if random.random() < crossoverProba:
       res[i] = int((code[i]+1)%2)
     # if res[i] == 0:
     #   postProba.append(1-crossoverProba)
     # else:
-      postProba.append(crossoverProba)
+    #  postProba.append(crossoverProba)
 
   # this is much faster
   postProba = np.array([])

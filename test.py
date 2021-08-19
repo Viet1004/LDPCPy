@@ -189,7 +189,8 @@ if __name__ == "__main__":
     false_pos = 0
     Lrounds = []
     Lcopm = []
-    nbTest=10
+    Ltime = []
+    nbTest=5
     for i in range(nbTest):
         received, postProba = LDPC.BSC_channel(codeword, p)
         #print(f'received: {received} postProba: {postProba}')
@@ -198,12 +199,13 @@ if __name__ == "__main__":
         #print(f'true crossoverProba: {round(copm,5)}')
         Lcopm.append(copm)
         time0=round(time.time()*1000)
-        verifi, rounds, recv_vec, match_fail, match_success = LDPC.new_MessagePassing(matrix, postProba,syndrom,n)
+        verifi, rounds, timediff, recv_vec, match_fail, match_success = LDPC.new_MessagePassing(matrix, postProba,syndrom,n)
         if verifi:
             print("Successful decoding!")
             if ((codeword-recv_vec)%2).sum() == 0:
                 success += 1
                 Lrounds.append(rounds)
+                Ltime.append(timediff)
             else :
                 false_pos += 1
             time1=round(time.time()*1000)
@@ -218,8 +220,8 @@ if __name__ == "__main__":
     if success != 0:
         mean_rounds = sum(Lrounds)/len(Lrounds)
         print(f'mean rounds: {round(mean_rounds,2)} min: {min(Lrounds)} max: {max(Lrounds)}')
-        #mean_time = sum(Ltime)/len(Ltime)
-        #print(f'mean time: {round(mean_time/1000,3)} sec ({round(mean_time/mean_rounds/1000,3)} sec / round)')
+        mean_time = sum(Ltime)/len(Ltime)
+        print(f'mean time: {round(mean_time,5)} sec ({round(mean_time/mean_rounds,5)} sec / round)')
 
     mean_coproba_measured = sum(Lcopm)/len(Lcopm) 
     Lcopm=np.array(Lcopm)
